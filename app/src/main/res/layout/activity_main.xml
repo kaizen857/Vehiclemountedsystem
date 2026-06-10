@@ -1,19 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/bg_dark"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <!-- Left Tab Rail -->
+    <LinearLayout
+        android:id="@+id/tabRail"
+        android:layout_width="@dimen/shell_tab_rail_width"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/bg_rail"
+        android:paddingTop="@dimen/shell_tab_rail_vertical_padding"
+        android:paddingBottom="@dimen/shell_tab_rail_vertical_padding">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tabOverview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tab_overview"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/shell_tab_text_size"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/tabMinimal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tab_minimal"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/shell_tab_text_size"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/tabNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tab_navigation"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/shell_tab_text_size"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/tabSensors"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tab_sensors"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/shell_tab_text_size"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/tabHvac"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tab_hvac"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/shell_tab_text_size"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/tabMedia"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tab_media"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/shell_tab_text_size"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/tabControls"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tab_controls"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/shell_tab_text_size"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/tabSettings"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tab_settings"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/shell_tab_text_size"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="@dimen/shell_divider_width"
+        android:layout_height="match_parent"
+        android:background="@color/border_color" />
+
+    <!-- Right Content Area -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="@dimen/shell_content_padding">
+
+        <!-- Header -->
+        <TextView
+            android:id="@+id/pageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_overview"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/shell_title_text_size"
+            android:textStyle="bold"
+            android:letterSpacing="0.05" />
+
+        <!-- Content Host -->
+        <FrameLayout
+            android:id="@+id/pageHost"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/shell_content_gap"
+            android:background="@color/card_bg"
+            android:padding="@dimen/shell_card_padding">
+
+            <!-- Placeholder for default overview page content -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/placeholder_overview"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/shell_placeholder_text_size" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

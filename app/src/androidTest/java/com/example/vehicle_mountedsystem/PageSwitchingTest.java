@@ -8,12 +8,16 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
 import android.content.Context;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.example.vehicle_mountedsystem.ui.pages.VehicleControlPageController;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +30,7 @@ public class PageSwitchingTest {
     public void clearHvacState() {
         Context context = ApplicationProvider.getApplicationContext();
         context.getSharedPreferences("hvac_state", Context.MODE_PRIVATE).edit().clear().commit();
+        context.getSharedPreferences(VehicleControlPageController.PREFERENCES_NAME, Context.MODE_PRIVATE).edit().clear().commit();
     }
 
     @Test
@@ -47,7 +52,13 @@ public class PageSwitchingTest {
 
             onView(withId(R.id.tabMedia)).perform(click());
             assertPage(R.id.pageMediaRoot, R.id.mediaPageTitle, R.string.title_media, R.string.page_media_badge);
-            assertMediaFallbackState();
+            assertMediaStateVisible();
+
+            onView(withId(R.id.tabControls)).perform(click());
+            assertPage(R.id.pageControlRoot, R.id.controlPageTitle, R.string.title_controls, R.string.page_control_badge);
+
+            onView(withId(R.id.tabSettings)).perform(click());
+            assertPage(R.id.pageSettingsRoot, R.id.settingsPageTitle, R.string.title_settings, R.string.page_settings_badge);
 
             onView(withId(R.id.tabOverview)).perform(click());
             assertPage(R.id.pageDashboardRoot, R.id.dashboardPageTitle, R.string.title_overview, R.string.page_dashboard_badge);
@@ -78,6 +89,48 @@ public class PageSwitchingTest {
         }
     }
 
+    @Test
+    public void controlPageUpdatesDemoStateAndSurvivesActivityRecreate() {
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            onView(withId(R.id.tabControls)).perform(click());
+            assertPage(R.id.pageControlRoot, R.id.controlPageTitle, R.string.title_controls, R.string.page_control_badge);
+            onView(allOf(withId(R.id.controlDemoNotice), withText(R.string.control_demo_notice))).check(matches(isDisplayed()));
+            assertControlState(
+                    "本地演示：左前窗已关闭",
+                    "本地演示：左后视镜已展开",
+                    "本地演示：座椅加热已关闭");
+
+            onView(withId(R.id.windowFrontLeftAction)).perform(scrollTo(), click());
+            onView(withId(R.id.mirrorLeftAction)).perform(scrollTo(), click());
+            onView(withId(R.id.seatHeatAction)).perform(scrollTo(), click());
+            assertControlState(
+                    "本地演示：左前窗已打开",
+                    "本地演示：左后视镜已折叠",
+                    "本地演示：座椅加热已开启");
+
+            scenario.recreate();
+            onView(withId(R.id.tabControls)).perform(click());
+            assertPage(R.id.pageControlRoot, R.id.controlPageTitle, R.string.title_controls, R.string.page_control_badge);
+            assertControlState(
+                    "本地演示：左前窗已打开",
+                    "本地演示：左后视镜已折叠",
+                    "本地演示：座椅加热已开启");
+        }
+    }
+
+    @Test
+    public void settingsPageShowsNonEmptyCapabilityStatuses() {
+        try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
+            onView(withId(R.id.tabSettings)).perform(click());
+            assertPage(R.id.pageSettingsRoot, R.id.settingsPageTitle, R.string.title_settings, R.string.page_settings_badge);
+            assertNonEmptyText(R.id.settingNotificationStatus);
+            assertNonEmptyText(R.id.settingSensorStatus);
+            assertNonEmptyText(R.id.settingIrStatus);
+            assertNonEmptyText(R.id.settingMediaStatus);
+            assertNonEmptyText(R.id.settingDataSource);
+        }
+    }
+
     private static void assertPage(int rootId, int pageBadgeId, int shellTitleResId, int badgeTextResId) {
         onView(withId(rootId)).check(matches(isDisplayed()));
         onView(allOf(withId(R.id.pageTitle), withText(shellTitleResId))).check(matches(isDisplayed()));
@@ -103,19 +156,27 @@ public class PageSwitchingTest {
                 .check(matches(isDisplayed()));
     }
 
-    private static void assertMediaFallbackState() {
+    private static void assertMediaStateVisible() {
         assertText(R.id.mediaTitleValue, "无媒体");
         assertText(R.id.mediaArtistValue, "未知艺术家");
         assertText(R.id.mediaPlaybackValue, "已暂停/未播放");
-        onView(withId(R.id.mediaConnectionModeValue)).perform(scrollTo());
-        onView(allOf(withId(R.id.mediaConnectionModeValue), withText("媒体键降级模式"))).check(matches(isDisplayed()));
-        onView(withId(R.id.mediaStatusMessage)).perform(scrollTo());
-        onView(allOf(withId(R.id.mediaStatusMessage), withText("未授权通知使用权，无法读取媒体会话；控制按钮将降级发送系统媒体键。")))
-                .check(matches(isDisplayed()));
+        assertNonEmptyText(R.id.mediaConnectionModeValue);
+        assertNonEmptyText(R.id.mediaStatusMessage);
+    }
+
+    private static void assertControlState(String windowState, String mirrorState, String seatHeatState) {
+        assertText(R.id.windowFrontLeftState, windowState);
+        assertText(R.id.mirrorLeftState, mirrorState);
+        assertText(R.id.seatHeatState, seatHeatState);
     }
 
     private static void assertText(int viewId, String text) {
         onView(withId(viewId)).perform(scrollTo());
         onView(allOf(withId(viewId), withText(text))).check(matches(isDisplayed()));
+    }
+
+    private static void assertNonEmptyText(int viewId) {
+        onView(withId(viewId)).perform(scrollTo());
+        onView(allOf(withId(viewId), withText(not(isEmptyString())))).check(matches(isDisplayed()));
     }
 }

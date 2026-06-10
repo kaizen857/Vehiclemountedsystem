@@ -59,6 +59,8 @@
     <string name="page_sensor_badge">硬件可用性回退</string>
     <string name="page_hvac_badge">本地空调状态机</string>
     <string name="page_media_badge">系统媒体会话联动</string>
+    <string name="page_control_badge">本地车辆控制演示</string>
+    <string name="page_settings_badge">能力与数据来源</string>
     <string name="navigation_demo_destination">课程楼 B 区</string>
     <string name="navigation_demo_eta">08 分钟</string>
     <string name="navigation_demo_distance">2.4 km</string>
@@ -96,4 +98,20 @@
     <string name="media_play_pause">播放/暂停</string>
     <string name="media_next">下一首</string>
     <string name="media_open_permission">授权设置</string>
+    <string name="control_demo_notice">以下按钮只修改本机演示状态，不会发送真实车辆控制、网络请求或红外指令。</string>
+    <string name="control_window_label">左前车窗</string>
+    <string name="control_mirror_label">左后视镜</string>
+    <string name="control_seat_heat_label">主驾座椅加热</string>
+    <string name="control_lock_label">车门锁定</string>
+    <string name="control_window_action">切换车窗演示</string>
+    <string name="control_mirror_action">切换后视镜演示</string>
+    <string name="control_seat_heat_action">切换座椅演示</string>
+    <string name="control_lock_action">切换锁定演示</string>
+    <string name="settings_notification_label">通知监听</string>
+    <string name="settings_sensor_label">传感器能力</string>
+    <string name="settings_ir_label">红外扩展</string>
+    <string name="settings_media_label">媒体会话</string>
+    <string name="settings_data_source_label">数据来源</string>
+    <string name="settings_ir_local_only">红外扩展未接入：本版本不声明红外权限，也不会调用红外硬件。</string>
+    <string name="settings_data_source_value">数据来源说明：车辆控制、导航和部分车况为本地演示状态；传感器与媒体仅展示系统可用能力和安全降级结果。</string>
 </resources>

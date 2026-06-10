@@ -58,6 +58,7 @@
     <string name="page_navigation_badge">演示导航 · 无地图依赖</string>
     <string name="page_sensor_badge">硬件可用性回退</string>
     <string name="page_hvac_badge">本地空调状态机</string>
+    <string name="page_media_badge">系统媒体会话联动</string>
     <string name="navigation_demo_destination">课程楼 B 区</string>
     <string name="navigation_demo_eta">08 分钟</string>
     <string name="navigation_demo_distance">2.4 km</string>
@@ -87,4 +88,12 @@
     <string name="hvac_mode_fan">送风</string>
     <string name="hvac_ac_toggle">切换 AC</string>
     <string name="hvac_circulation_toggle">切换循环</string>
+    <string name="media_title_label">曲目</string>
+    <string name="media_artist_label">艺术家</string>
+    <string name="media_playback_label">播放状态</string>
+    <string name="media_connection_label">联动模式</string>
+    <string name="media_previous">上一首</string>
+    <string name="media_play_pause">播放/暂停</string>
+    <string name="media_next">下一首</string>
+    <string name="media_open_permission">授权设置</string>
 </resources>

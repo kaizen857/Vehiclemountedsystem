@@ -45,6 +45,10 @@ public class PageSwitchingTest {
             onView(withId(R.id.tabHvac)).perform(click());
             assertPage(R.id.pageHvacRoot, R.id.hvacPageTitle, R.string.title_hvac, R.string.page_hvac_badge);
 
+            onView(withId(R.id.tabMedia)).perform(click());
+            assertPage(R.id.pageMediaRoot, R.id.mediaPageTitle, R.string.title_media, R.string.page_media_badge);
+            assertMediaFallbackState();
+
             onView(withId(R.id.tabOverview)).perform(click());
             assertPage(R.id.pageDashboardRoot, R.id.dashboardPageTitle, R.string.title_overview, R.string.page_dashboard_badge);
         }
@@ -96,6 +100,17 @@ public class PageSwitchingTest {
     private static void assertCapabilityMessage() {
         onView(withId(R.id.hvacIrCapabilityMessage)).perform(scrollTo());
         onView(allOf(withId(R.id.hvacIrCapabilityMessage), withText(R.string.hvac_ir_capability_local_only)))
+                .check(matches(isDisplayed()));
+    }
+
+    private static void assertMediaFallbackState() {
+        assertText(R.id.mediaTitleValue, "无媒体");
+        assertText(R.id.mediaArtistValue, "未知艺术家");
+        assertText(R.id.mediaPlaybackValue, "已暂停/未播放");
+        onView(withId(R.id.mediaConnectionModeValue)).perform(scrollTo());
+        onView(allOf(withId(R.id.mediaConnectionModeValue), withText("媒体键降级模式"))).check(matches(isDisplayed()));
+        onView(withId(R.id.mediaStatusMessage)).perform(scrollTo());
+        onView(allOf(withId(R.id.mediaStatusMessage), withText("未授权通知使用权，无法读取媒体会话；控制按钮将降级发送系统媒体键。")))
                 .check(matches(isDisplayed()));
     }
 

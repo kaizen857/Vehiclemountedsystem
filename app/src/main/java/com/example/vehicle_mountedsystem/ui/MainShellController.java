@@ -8,8 +8,10 @@ import android.widget.TextView;
 
 import com.example.vehicle_mountedsystem.R;
 import com.example.vehicle_mountedsystem.data.hvac.HvacRepository;
+import com.example.vehicle_mountedsystem.data.media.SystemMediaController;
 import com.example.vehicle_mountedsystem.ui.pages.DashboardPageController;
 import com.example.vehicle_mountedsystem.ui.pages.HvacPageController;
+import com.example.vehicle_mountedsystem.ui.pages.MediaPageController;
 import com.example.vehicle_mountedsystem.ui.pages.MinimalVehiclePageController;
 import com.example.vehicle_mountedsystem.ui.pages.NavigationPageController;
 import com.example.vehicle_mountedsystem.ui.pages.SensorPageController;
@@ -25,6 +27,7 @@ public class MainShellController {
     private final NavigationPageController navigationPageController;
     private final SensorPageController sensorPageController;
     private final HvacPageController hvacPageController;
+    private final MediaPageController mediaPageController;
 
     public MainShellController(View root) {
         this.root = root;
@@ -35,6 +38,7 @@ public class MainShellController {
         this.navigationPageController = new NavigationPageController();
         this.sensorPageController = new SensorPageController();
         this.hvacPageController = new HvacPageController(new HvacRepository(root.getContext()));
+        this.mediaPageController = new MediaPageController(new SystemMediaController(root.getContext()));
         this.tabController = new TabController(root, this::handleTabSelection);
         this.tabController.selectTab(TabController.Tab.OVERVIEW);
     }
@@ -65,6 +69,8 @@ public class MainShellController {
                 return sensorPageController.createView(pageHostView);
             case HVAC:
                 return hvacPageController.createView(pageHostView);
+            case MEDIA:
+                return mediaPageController.createView(pageHostView);
             default:
                 return createPlaceholder(tab);
         }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="shell_tab_rail_width">110dp</dimen>
+    <dimen name="shell_tab_rail_vertical_padding">16dp</dimen>
+    <dimen name="shell_tab_text_size">16sp</dimen>
+    <dimen name="shell_divider_width">1dp</dimen>
+    <dimen name="shell_content_padding">24dp</dimen>
+    <dimen name="shell_content_gap">16dp</dimen>
+    <dimen name="shell_card_padding">16dp</dimen>
+    <dimen name="shell_title_text_size">24sp</dimen>
+    <dimen name="shell_placeholder_text_size">18sp</dimen>
+</resources>

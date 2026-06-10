@@ -2,4 +2,16 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Car-like cold tech palette -->
+    <color name="bg_dark">#0B0F19</color>
+    <color name="bg_rail">#0F172A</color>
+    <color name="card_bg">#1E293B</color>
+    <color name="accent_cyan">#06B6D4</color>
+    <color name="accent_blue">#38BDF8</color>
+    <color name="text_primary">#F8FAFC</color>
+    <color name="text_secondary">#94A3B8</color>
+    <color name="border_color">#334155</color>
+    <color name="tab_selected_bg">#1E293B</color>
+    <color name="tab_unselected_bg">#00000000</color>
 </resources>

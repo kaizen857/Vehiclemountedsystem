@@ -1,3 +1,33 @@
 <resources>
-    <string name="app_name">Vehicle-mounted system</string>
+    <string name="app_name">智能车载系统</string>
+
+    <!-- Tabs -->
+    <string name="tab_overview">总览</string>
+    <string name="tab_minimal">简洁</string>
+    <string name="tab_navigation">导航</string>
+    <string name="tab_sensors">传感器</string>
+    <string name="tab_hvac">空调</string>
+    <string name="tab_media">多媒体</string>
+    <string name="tab_controls">控制</string>
+    <string name="tab_settings">设置</string>
+
+    <!-- Page Titles -->
+    <string name="title_overview">系统总览</string>
+    <string name="title_minimal">简洁车况</string>
+    <string name="title_navigation">演示导航</string>
+    <string name="title_sensors">传感器数据</string>
+    <string name="title_hvac">空调控制</string>
+    <string name="title_media">多媒体联动</string>
+    <string name="title_controls">车辆控制</string>
+    <string name="title_settings">系统设置</string>
+
+    <!-- Shell placeholders -->
+    <string name="placeholder_overview">总览页面内容区</string>
+    <string name="placeholder_minimal">简洁车况占位区</string>
+    <string name="placeholder_navigation">演示导航占位区</string>
+    <string name="placeholder_sensors">传感器数据占位区</string>
+    <string name="placeholder_hvac">空调控制占位区</string>
+    <string name="placeholder_media">多媒体联动占位区</string>
+    <string name="placeholder_controls">车辆控制占位区</string>
+    <string name="placeholder_settings">系统设置占位区</string>
 </resources>

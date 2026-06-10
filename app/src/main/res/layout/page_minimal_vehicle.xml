@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pageMinimalVehicleRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/minimalPageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/page_minimal_badge"
+        android:textColor="@color/accent_blue"
+        android:textSize="@dimen/page_title_text_size"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/minimalSpeedValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/page_section_gap"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/page_speed_text_size"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/page_card_gap"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/minimalGearValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/page_card_gap"
+            android:layout_weight="1"
+            android:background="@color/card_panel_bg"
+            android:padding="@dimen/page_card_padding"
+            android:textColor="@color/accent_cyan"
+            android:textSize="@dimen/page_value_text_size" />
+
+        <TextView
+            android:id="@+id/minimalBatteryValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/page_card_gap"
+            android:layout_weight="1"
+            android:background="@color/card_panel_bg"
+            android:padding="@dimen/page_card_padding"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/page_value_text_size" />
+
+        <TextView
+            android:id="@+id/minimalPowerValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/card_panel_bg"
+            android:padding="@dimen/page_card_padding"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/page_value_text_size" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/minimalHealthStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/page_card_gap"
+        android:background="@color/card_panel_alt_bg"
+        android:padding="@dimen/page_card_padding"
+        android:textColor="@color/accent_green"
+        android:textSize="@dimen/page_value_text_size"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/minimalSensorAvailability"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/page_card_gap"
+        android:background="@color/card_panel_bg"
+        android:padding="@dimen/page_card_padding"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/page_status_text_size" />
+
+    <TextView
+        android:id="@+id/minimalImuStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/page_card_gap"
+        android:background="@color/card_panel_bg"
+        android:padding="@dimen/page_card_padding"
+        android:textColor="@color/accent_amber"
+        android:textSize="@dimen/page_status_text_size" />
+
+    <TextView
+        android:id="@+id/minimalSystemTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/page_card_gap"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/page_status_text_size" />
+
+    <TextView
+        android:id="@+id/minimalDemoMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/page_micro_gap"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/page_status_text_size" />
+</LinearLayout>

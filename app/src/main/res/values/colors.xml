@@ -14,4 +14,8 @@
     <color name="border_color">#334155</color>
     <color name="tab_selected_bg">#1E293B</color>
     <color name="tab_unselected_bg">#00000000</color>
+    <color name="card_panel_bg">#263247</color>
+    <color name="card_panel_alt_bg">#111827</color>
+    <color name="accent_green">#22C55E</color>
+    <color name="accent_amber">#F59E0B</color>
 </resources>

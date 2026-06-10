@@ -9,4 +9,15 @@
     <dimen name="shell_card_padding">16dp</dimen>
     <dimen name="shell_title_text_size">24sp</dimen>
     <dimen name="shell_placeholder_text_size">18sp</dimen>
+    <dimen name="page_section_gap">12dp</dimen>
+    <dimen name="page_card_gap">12dp</dimen>
+    <dimen name="page_card_padding">12dp</dimen>
+    <dimen name="page_micro_gap">6dp</dimen>
+    <dimen name="page_title_text_size">16sp</dimen>
+    <dimen name="page_label_text_size">12sp</dimen>
+    <dimen name="page_value_text_size">20sp</dimen>
+    <dimen name="page_speed_text_size">56sp</dimen>
+    <dimen name="page_status_text_size">13sp</dimen>
+    <dimen name="page_nav_panel_height">96dp</dimen>
+    <dimen name="page_route_lane_height">4dp</dimen>
 </resources>

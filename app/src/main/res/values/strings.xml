@@ -30,4 +30,42 @@
     <string name="placeholder_media">多媒体联动占位区</string>
     <string name="placeholder_controls">车辆控制占位区</string>
     <string name="placeholder_settings">系统设置占位区</string>
+
+    <!-- Page labels -->
+    <string name="page_label_speed">IMU 估算速度</string>
+    <string name="page_label_gear">模拟档位</string>
+    <string name="page_label_battery">手机电量</string>
+    <string name="page_label_power">手机功率估算</string>
+    <string name="page_label_g_value">合成 G 值</string>
+    <string name="page_label_imu">IMU 状态</string>
+    <string name="page_label_navigation">导航摘要</string>
+    <string name="page_label_hvac">空调摘要</string>
+    <string name="page_label_vehicle_health">车况状态</string>
+    <string name="page_label_sensor_availability">传感器概览</string>
+    <string name="page_label_system_time">系统时间</string>
+    <string name="page_label_demo_mode">课程演示模式</string>
+    <string name="page_label_destination">模拟目的地</string>
+    <string name="page_label_eta">预计到达</string>
+    <string name="page_label_distance">剩余距离</string>
+    <string name="page_label_accelerometer">加速度计</string>
+    <string name="page_label_linear_acceleration">线性加速度</string>
+    <string name="page_label_gyroscope">陀螺仪</string>
+    <string name="page_label_rotation_vector">旋转向量</string>
+
+    <!-- Page static copy -->
+    <string name="page_dashboard_badge">冷舱核心状态</string>
+    <string name="page_minimal_badge">驾驶专注模式</string>
+    <string name="page_navigation_badge">演示导航 · 无地图依赖</string>
+    <string name="page_sensor_badge">硬件可用性回退</string>
+    <string name="navigation_demo_destination">课程楼 B 区</string>
+    <string name="navigation_demo_eta">08 分钟</string>
+    <string name="navigation_demo_distance">2.4 km</string>
+    <string name="navigation_demo_summary">演示导航：前方 300 m 右转，路线进度 35%</string>
+    <string name="navigation_demo_notice">本页仅展示本地路线卡片，不接入地图、网络或定位权限。</string>
+    <string name="navigation_route_primary">推荐路线 · 校园环路</string>
+    <string name="navigation_route_secondary">备选路线 · 实训楼支路</string>
+    <string name="minimal_vehicle_health_normal">正常</string>
+    <string name="minimal_sensor_fallback">传感器未连接实时流，当前显示默认不可用状态</string>
+    <string name="minimal_demo_mode_value">本地课程演示</string>
+    <string name="sensor_timestamp_default">刷新时间戳：0 ms</string>
 </resources>

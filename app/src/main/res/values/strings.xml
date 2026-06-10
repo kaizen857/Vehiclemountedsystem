@@ -57,6 +57,7 @@
     <string name="page_minimal_badge">驾驶专注模式</string>
     <string name="page_navigation_badge">演示导航 · 无地图依赖</string>
     <string name="page_sensor_badge">硬件可用性回退</string>
+    <string name="page_hvac_badge">本地空调状态机</string>
     <string name="navigation_demo_destination">课程楼 B 区</string>
     <string name="navigation_demo_eta">08 分钟</string>
     <string name="navigation_demo_distance">2.4 km</string>
@@ -68,4 +69,22 @@
     <string name="minimal_sensor_fallback">传感器未连接实时流，当前显示默认不可用状态</string>
     <string name="minimal_demo_mode_value">本地课程演示</string>
     <string name="sensor_timestamp_default">刷新时间戳：0 ms</string>
+    <string name="hvac_temperature_label">舱内温度</string>
+    <string name="hvac_fan_label">风量档位</string>
+    <string name="hvac_mode_label">当前模式</string>
+    <string name="hvac_ac_label">AC 状态</string>
+    <string name="hvac_circulation_label">循环方式</string>
+    <string name="hvac_capability_label">扩展能力</string>
+    <string name="hvac_ir_capability_local_only">红外扩展未启用，仅保存本地空调状态，不会触发设备控制。</string>
+    <string name="hvac_temp_decrease">温度 -</string>
+    <string name="hvac_temp_increase">温度 +</string>
+    <string name="hvac_fan_decrease">风量 -</string>
+    <string name="hvac_fan_increase">风量 +</string>
+    <string name="hvac_mode_auto">自动</string>
+    <string name="hvac_mode_cool">制冷</string>
+    <string name="hvac_mode_heat">制热</string>
+    <string name="hvac_mode_defog">除雾</string>
+    <string name="hvac_mode_fan">送风</string>
+    <string name="hvac_ac_toggle">切换 AC</string>
+    <string name="hvac_circulation_toggle">切换循环</string>
 </resources>

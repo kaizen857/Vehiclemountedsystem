@@ -15,6 +15,8 @@ import com.example.vehicle_mountedsystem.ui.pages.MediaPageController;
 import com.example.vehicle_mountedsystem.ui.pages.MinimalVehiclePageController;
 import com.example.vehicle_mountedsystem.ui.pages.NavigationPageController;
 import com.example.vehicle_mountedsystem.ui.pages.SensorPageController;
+import com.example.vehicle_mountedsystem.ui.pages.SettingsPageController;
+import com.example.vehicle_mountedsystem.ui.pages.VehicleControlPageController;
 
 public class MainShellController {
 
@@ -28,6 +30,8 @@ public class MainShellController {
     private final SensorPageController sensorPageController;
     private final HvacPageController hvacPageController;
     private final MediaPageController mediaPageController;
+    private final VehicleControlPageController vehicleControlPageController;
+    private final SettingsPageController settingsPageController;
 
     public MainShellController(View root) {
         this.root = root;
@@ -39,6 +43,8 @@ public class MainShellController {
         this.sensorPageController = new SensorPageController();
         this.hvacPageController = new HvacPageController(new HvacRepository(root.getContext()));
         this.mediaPageController = new MediaPageController(new SystemMediaController(root.getContext()));
+        this.vehicleControlPageController = new VehicleControlPageController();
+        this.settingsPageController = new SettingsPageController();
         this.tabController = new TabController(root, this::handleTabSelection);
         this.tabController.selectTab(TabController.Tab.OVERVIEW);
     }
@@ -71,6 +77,10 @@ public class MainShellController {
                 return hvacPageController.createView(pageHostView);
             case MEDIA:
                 return mediaPageController.createView(pageHostView);
+            case CONTROLS:
+                return vehicleControlPageController.createView(pageHostView);
+            case SETTINGS:
+                return settingsPageController.createView(pageHostView);
             default:
                 return createPlaceholder(tab);
         }

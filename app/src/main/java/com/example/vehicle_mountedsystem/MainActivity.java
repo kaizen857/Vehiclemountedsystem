@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.vehicle_mountedsystem.ui.MainShellController;
 
 public class MainActivity extends AppCompatActivity {
+    private MainShellController mainShellController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,14 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        new MainShellController(findViewById(R.id.main));
+        mainShellController = new MainShellController(findViewById(R.id.main));
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mainShellController != null) {
+            mainShellController.destroy();
+        }
+        super.onDestroy();
     }
 }

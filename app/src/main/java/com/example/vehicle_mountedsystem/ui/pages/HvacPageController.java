@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.example.vehicle_mountedsystem.R;
 import com.example.vehicle_mountedsystem.data.hvac.HvacRepository;
 import com.example.vehicle_mountedsystem.model.HvacState;
+import com.example.vehicle_mountedsystem.util.AnimationHelper;
 
 public final class HvacPageController {
     private final HvacRepository repository;
@@ -28,6 +29,7 @@ public final class HvacPageController {
         bindViews(view);
         bindActions(view);
         render(repository.load());
+        AnimationHelper.playPageEnter(view);
         return view;
     }
 

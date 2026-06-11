@@ -50,6 +50,56 @@ public class ImuSpeedEstimatorTest {
     }
 
     @Test
+    public void applyZeroSpeedCorrection_rejectsWhenGyroEnergyIsHigh() {
+        ImuSpeedEstimator estimator = new ImuSpeedEstimator();
+
+        calibrateAtRest(estimator);
+        estimator.setGyroEnergy(0.5d);
+        estimator.updateSample(0.01d, 600L);
+        estimator.updateSample(0.01d, 700L);
+        estimator.updateSample(0.01d, 800L);
+        estimator.updateSample(0.01d, 900L);
+        estimator.updateSample(0.01d, 1000L);
+        estimator.updateSample(0.01d, 1100L);
+
+        assertTrue(estimator.getSpeedMps() > 0.0d);
+    }
+
+    @Test
+    public void applyZeroSpeedCorrection_acceptsWhenGyroEnergyIsLow() {
+        ImuSpeedEstimator estimator = new ImuSpeedEstimator();
+
+        calibrateAtRest(estimator);
+        estimator.updateSample(1.0d, 600L);
+
+        estimator.setGyroEnergy(0.0d);
+        estimator.updateSample(0.0d, 700L);
+        estimator.updateSample(0.0d, 800L);
+        estimator.updateSample(0.0d, 900L);
+        estimator.updateSample(0.0d, 1000L);
+        ImuSpeedState state = estimator.updateSample(0.0d, 1100L);
+
+        assertEquals(0.0d, state.getSpeedMetersPerSecond(), 0.0001d);
+    }
+
+    @Test
+    public void onlineBiasEstimation_correctsResidualDriftOverTime() {
+        ImuSpeedEstimator estimator = new ImuSpeedEstimator();
+
+        calibrateAtRest(estimator);
+        estimator.setGyroEnergy(0.0d);
+
+        // Simulate a slow bias drift: residual 0.03 m/s² for many still samples
+        for (int i = 0; i < 1000; i++) {
+            estimator.updateSample(0.03d, 600L + i * 100L);
+        }
+
+        double speedAfterDrift = estimator.getSpeedMps();
+        assertTrue("speed should be near zero after online bias correction, got " + speedAfterDrift,
+                speedAfterDrift < 0.1d);
+    }
+
+    @Test
     public void updateSample_clampsNegativeSpeedAndRejectsInvalidSamples() {
         ImuSpeedEstimator estimator = new ImuSpeedEstimator();
 

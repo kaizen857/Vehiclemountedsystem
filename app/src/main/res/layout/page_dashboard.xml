@@ -124,22 +124,27 @@
                 android:id="@+id/dashboardPowerValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/page_card_gap"
                 android:layout_weight="1"
                 android:background="@color/card_panel_bg"
                 android:padding="@dimen/page_card_padding"
                 android:textColor="@color/text_primary"
                 android:textSize="@dimen/page_value_text_size" />
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/dashboardGValue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/card_panel_bg"
-                android:padding="@dimen/page_card_padding"
-                android:textColor="@color/text_primary"
-                android:textSize="@dimen/page_value_text_size" />
+        <!-- G-Force Indicator -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/page_card_gap"
+            android:background="@color/card_panel_bg"
+            android:orientation="vertical"
+            android:padding="@dimen/page_card_padding">
+
+            <com.example.vehicle_mountedsystem.ui.GForceIndicatorView
+                android:id="@+id/dashboardGForceIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_gravity="center" />
         </LinearLayout>
 
         <TextView

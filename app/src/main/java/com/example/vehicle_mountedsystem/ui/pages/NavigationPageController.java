@@ -9,10 +9,12 @@ import android.widget.TextView;
 import com.example.vehicle_mountedsystem.R;
 import com.example.vehicle_mountedsystem.model.ImuSpeedState;
 import com.example.vehicle_mountedsystem.model.VehicleState;
+import com.example.vehicle_mountedsystem.util.AnimationHelper;
 import com.example.vehicle_mountedsystem.util.UnitFormatter;
 
 public final class NavigationPageController {
-    private final VehicleState vehicleState;
+    private VehicleState vehicleState;
+    private View pageView;
 
     public NavigationPageController() {
         this(VehicleState.defaultState());
@@ -24,8 +26,24 @@ public final class NavigationPageController {
 
     public View createView(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.page_navigation, parent, false);
+        pageView = view;
         bind(view);
+        AnimationHelper.playPageEnter(view);
         return view;
+    }
+
+    public void refresh(ImuSpeedState imuSpeedState) {
+        VehicleState updated = new VehicleState(
+                imuSpeedState.getSpeedMetersPerSecond(),
+                vehicleState.getGearState(),
+                vehicleState.getHvacState(),
+                vehicleState.getBatteryStatus(),
+                imuSpeedState,
+                vehicleState.getMediaState());
+        this.vehicleState = updated;
+        if (pageView != null) {
+            bind(pageView);
+        }
     }
 
     private void bind(View view) {

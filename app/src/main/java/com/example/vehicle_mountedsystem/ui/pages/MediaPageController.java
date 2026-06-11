@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.vehicle_mountedsystem.R;
 import com.example.vehicle_mountedsystem.data.media.SystemMediaController;
 import com.example.vehicle_mountedsystem.model.MediaState;
+import com.example.vehicle_mountedsystem.util.AnimationHelper;
 
 public final class MediaPageController {
     private final SystemMediaController mediaController;
@@ -29,9 +30,15 @@ public final class MediaPageController {
     public View createView(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.page_media, parent, false);
         bindViews(view);
+        mediaController.setSnapshotListener(snapshot -> view.post(() -> render(snapshot)));
         bindActions(view);
         render(mediaController.loadSnapshot());
+        AnimationHelper.playPageEnter(view);
         return view;
+    }
+
+    public void stop() {
+        mediaController.setSnapshotListener(null);
     }
 
     private void bindViews(View view) {
@@ -43,10 +50,15 @@ public final class MediaPageController {
     }
 
     private void bindActions(View view) {
-        click(view, R.id.mediaPreviousControl, () -> render(mediaController.dispatch(SystemMediaController.TransportAction.PREVIOUS)));
-        click(view, R.id.mediaPlayPauseControl, () -> render(mediaController.dispatch(SystemMediaController.TransportAction.PLAY_PAUSE)));
-        click(view, R.id.mediaNextControl, () -> render(mediaController.dispatch(SystemMediaController.TransportAction.NEXT)));
+        click(view, R.id.mediaPreviousControl, () -> dispatchAndRefresh(view, SystemMediaController.TransportAction.PREVIOUS));
+        click(view, R.id.mediaPlayPauseControl, () -> dispatchAndRefresh(view, SystemMediaController.TransportAction.PLAY_PAUSE));
+        click(view, R.id.mediaNextControl, () -> dispatchAndRefresh(view, SystemMediaController.TransportAction.NEXT));
         click(view, R.id.mediaPermissionAction, () -> openNotificationSettings(view.getContext()));
+    }
+
+    private void dispatchAndRefresh(View view, SystemMediaController.TransportAction action) {
+        render(mediaController.dispatch(action));
+        view.postDelayed(() -> render(mediaController.loadSnapshot()), 300L);
     }
 
     private void render(SystemMediaController.MediaSnapshot snapshot) {

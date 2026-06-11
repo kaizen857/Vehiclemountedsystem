@@ -10,6 +10,7 @@ import com.example.vehicle_mountedsystem.R;
 import com.example.vehicle_mountedsystem.model.BatteryStatus;
 import com.example.vehicle_mountedsystem.model.ImuSpeedState;
 import com.example.vehicle_mountedsystem.model.VehicleState;
+import com.example.vehicle_mountedsystem.util.AnimationHelper;
 import com.example.vehicle_mountedsystem.util.UnitFormatter;
 
 import java.text.SimpleDateFormat;
@@ -17,7 +18,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public final class MinimalVehiclePageController {
-    private final VehicleState vehicleState;
+    private VehicleState vehicleState;
+    private View pageView;
 
     public MinimalVehiclePageController() {
         this(VehicleState.defaultState());
@@ -29,8 +31,27 @@ public final class MinimalVehiclePageController {
 
     public View createView(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.page_minimal_vehicle, parent, false);
+        pageView = view;
         bind(view);
+        AnimationHelper.playPageEnter(view);
         return view;
+    }
+
+    /**
+     * Called by MainShellController to push live IMU data into the page.
+     */
+    public void refresh(BatteryStatus batteryStatus, ImuSpeedState imuSpeedState) {
+        VehicleState updated = new VehicleState(
+                imuSpeedState.getSpeedMetersPerSecond(),
+                vehicleState.getGearState(),
+                vehicleState.getHvacState(),
+                batteryStatus,
+                imuSpeedState,
+                vehicleState.getMediaState());
+        this.vehicleState = updated;
+        if (pageView != null) {
+            bind(pageView);
+        }
     }
 
     private void bind(View view) {

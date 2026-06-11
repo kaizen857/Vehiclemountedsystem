@@ -5,6 +5,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
+import android.os.HandlerThread;
 
 import com.example.vehicle_mountedsystem.model.AvailabilityStatus;
 import com.example.vehicle_mountedsystem.model.SensorReading;
@@ -19,23 +21,27 @@ public final class MotionSensorProvider {
     public static final int SENSOR_LINEAR_ACCELERATION = Sensor.TYPE_LINEAR_ACCELERATION;
     public static final int SENSOR_GYROSCOPE = Sensor.TYPE_GYROSCOPE;
     public static final int SENSOR_ROTATION_VECTOR = Sensor.TYPE_ROTATION_VECTOR;
+    public static final int SENSOR_GAME_ROTATION_VECTOR = Sensor.TYPE_GAME_ROTATION_VECTOR;
 
     private static final int[] REQUIRED_SENSORS = {
             SENSOR_ACCELEROMETER,
             SENSOR_LINEAR_ACCELERATION,
             SENSOR_GYROSCOPE,
-            SENSOR_ROTATION_VECTOR
+            SENSOR_ROTATION_VECTOR,
+            SENSOR_GAME_ROTATION_VECTOR
     };
     private static final String ACCELEROMETER_NAME = "加速度计";
     private static final String LINEAR_ACCELERATION_NAME = "线性加速度";
     private static final String GYROSCOPE_NAME = "陀螺仪";
     private static final String ROTATION_VECTOR_NAME = "旋转向量";
+    private static final String GAME_ROTATION_VECTOR_NAME = "游戏旋转向量";
     private static final String ACCELERATION_UNIT = "m/s²";
     private static final String GYROSCOPE_UNIT = "rad/s";
     private static final String ROTATION_UNIT = "unitless";
 
     private final MotionSensorSource sensorSource;
     private final Map<Integer, SensorReading> readings = new HashMap<>();
+    private ReadingListener readingListener;
 
     public MotionSensorProvider(Context context) {
         this(new AndroidMotionSensorSource(context));
@@ -46,7 +52,7 @@ public final class MotionSensorProvider {
         resetUnavailableReadings();
     }
 
-    public void start() {
+    public synchronized void start() {
         resetUnavailableReadings();
         sensorSource.start(new SourceListener() {
             @Override
@@ -55,38 +61,56 @@ public final class MotionSensorProvider {
             }
         }, Arrays.copyOf(REQUIRED_SENSORS, REQUIRED_SENSORS.length));
         for (int sensorType : REQUIRED_SENSORS) {
-            if (!sensorSource.hasSensor(sensorType)) {
+            if (sensorSource.hasSensor(sensorType)) {
+                readings.put(sensorType, waitingReading(sensorType));
+            } else {
                 readings.put(sensorType, unavailableReading(sensorType));
             }
         }
+        notifyReadingsChanged();
     }
 
     public void stop() {
         sensorSource.stop();
     }
 
-    public void onSample(SensorSample sample) {
+    public synchronized void setReadingListener(ReadingListener readingListener) {
+        this.readingListener = readingListener;
+    }
+
+    public synchronized void onSample(SensorSample sample) {
         Objects.requireNonNull(sample, "sample");
         if (!isSupportedSensor(sample.getSensorType())) {
             return;
         }
         readings.put(sample.getSensorType(), toReading(sample));
+        notifyReadingsChanged();
     }
 
-    public SensorReading getAccelerometerReading() {
+    private void notifyReadingsChanged() {
+        if (readingListener != null) {
+            readingListener.onReadingsChanged(this);
+        }
+    }
+
+    public synchronized SensorReading getAccelerometerReading() {
         return readings.get(SENSOR_ACCELEROMETER);
     }
 
-    public SensorReading getLinearAccelerationReading() {
+    public synchronized SensorReading getLinearAccelerationReading() {
         return readings.get(SENSOR_LINEAR_ACCELERATION);
     }
 
-    public SensorReading getGyroscopeReading() {
+    public synchronized SensorReading getGyroscopeReading() {
         return readings.get(SENSOR_GYROSCOPE);
     }
 
-    public SensorReading getRotationVectorReading() {
+    public synchronized SensorReading getRotationVectorReading() {
         return readings.get(SENSOR_ROTATION_VECTOR);
+    }
+
+    public synchronized SensorReading getGameRotationVectorReading() {
+        return readings.get(SENSOR_GAME_ROTATION_VECTOR);
     }
 
     private SensorReading toReading(SensorSample sample) {
@@ -115,6 +139,16 @@ public final class MotionSensorProvider {
                 AvailabilityStatus.unavailable(nameFor(sensorType) + "不可用", 0L));
     }
 
+    private static SensorReading waitingReading(int sensorType) {
+        return new SensorReading(
+                nameFor(sensorType),
+                0.0d,
+                0.0d,
+                0.0d,
+                unitFor(sensorType),
+                AvailabilityStatus.available("等待" + nameFor(sensorType) + "数据", 0L));
+    }
+
     private static boolean isSupportedSensor(int sensorType) {
         for (int requiredSensor : REQUIRED_SENSORS) {
             if (requiredSensor == sensorType) {
@@ -137,6 +171,9 @@ public final class MotionSensorProvider {
         if (sensorType == SENSOR_ROTATION_VECTOR) {
             return ROTATION_VECTOR_NAME;
         }
+        if (sensorType == SENSOR_GAME_ROTATION_VECTOR) {
+            return GAME_ROTATION_VECTOR_NAME;
+        }
         throw new IllegalArgumentException("Unsupported sensor type: " + sensorType);
     }
 
@@ -147,7 +184,7 @@ public final class MotionSensorProvider {
         if (sensorType == SENSOR_GYROSCOPE) {
             return GYROSCOPE_UNIT;
         }
-        if (sensorType == SENSOR_ROTATION_VECTOR) {
+        if (sensorType == SENSOR_ROTATION_VECTOR || sensorType == SENSOR_GAME_ROTATION_VECTOR) {
             return ROTATION_UNIT;
         }
         throw new IllegalArgumentException("Unsupported sensor type: " + sensorType);
@@ -163,6 +200,10 @@ public final class MotionSensorProvider {
 
     public interface SourceListener {
         void onSensorSample(SensorSample sample);
+    }
+
+    public interface ReadingListener {
+        void onReadingsChanged(MotionSensorProvider provider);
     }
 
     public static final class SensorSample {
@@ -210,6 +251,7 @@ public final class MotionSensorProvider {
     private static final class AndroidMotionSensorSource implements MotionSensorSource, SensorEventListener {
         private final SensorManager sensorManager;
         private SourceListener listener;
+        private HandlerThread sensorThread;
 
         private AndroidMotionSensorSource(Context context) {
             Context appContext = Objects.requireNonNull(context, "context").getApplicationContext();
@@ -227,10 +269,13 @@ public final class MotionSensorProvider {
             if (sensorManager == null) {
                 return;
             }
+            sensorThread = new HandlerThread("vehicle-motion-sensors");
+            sensorThread.start();
+            Handler handler = new Handler(sensorThread.getLooper());
             for (int sensorType : sensorTypes) {
                 Sensor sensor = sensorManager.getDefaultSensor(sensorType);
                 if (sensor != null) {
-                    sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME);
+                    sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST, handler);
                 }
             }
         }
@@ -239,6 +284,10 @@ public final class MotionSensorProvider {
         public void stop() {
             if (sensorManager != null) {
                 sensorManager.unregisterListener(this);
+            }
+            if (sensorThread != null) {
+                sensorThread.quitSafely();
+                sensorThread = null;
             }
             listener = null;
         }

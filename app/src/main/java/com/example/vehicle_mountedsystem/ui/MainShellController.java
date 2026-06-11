@@ -1,5 +1,8 @@
 package com.example.vehicle_mountedsystem.ui;
 
+import android.hardware.SensorManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,8 +10,14 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.vehicle_mountedsystem.R;
+import com.example.vehicle_mountedsystem.data.battery.BatteryStatusProvider;
 import com.example.vehicle_mountedsystem.data.hvac.HvacRepository;
 import com.example.vehicle_mountedsystem.data.media.SystemMediaController;
+import com.example.vehicle_mountedsystem.data.sensor.MotionSensorProvider;
+import com.example.vehicle_mountedsystem.data.speed.ImuSpeedEstimator;
+import com.example.vehicle_mountedsystem.model.BatteryStatus;
+import com.example.vehicle_mountedsystem.model.ImuSpeedState;
+import com.example.vehicle_mountedsystem.model.SensorReading;
 import com.example.vehicle_mountedsystem.ui.pages.DashboardPageController;
 import com.example.vehicle_mountedsystem.ui.pages.HvacPageController;
 import com.example.vehicle_mountedsystem.ui.pages.MediaPageController;
@@ -19,6 +28,9 @@ import com.example.vehicle_mountedsystem.ui.pages.SettingsPageController;
 import com.example.vehicle_mountedsystem.ui.pages.VehicleControlPageController;
 
 public class MainShellController {
+
+    private static final long DASHBOARD_REFRESH_INTERVAL_MILLIS = 200L;
+    private static final long BATTERY_REFRESH_INTERVAL_MILLIS = 2000L;
 
     private final View root;
     private final TextView pageTitleView;
@@ -33,27 +45,77 @@ public class MainShellController {
     private final VehicleControlPageController vehicleControlPageController;
     private final SettingsPageController settingsPageController;
 
+    // Shared data providers
+    private final MotionSensorProvider motionSensorProvider;
+    private final BatteryStatusProvider batteryStatusProvider;
+    private final ImuSpeedEstimator imuSpeedEstimator;
+
+    private final Handler uiHandler;
+    private BatteryStatus cachedBatteryStatus;
+    private ImuSpeedState cachedImuState;
+    private double cachedLinearAccelX;
+    private double cachedLinearAccelY;
+    private boolean imuNeedsCalibration = true;
+
+    private TabController.Tab currentTab;
+
+    private final Runnable dashboardRefreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+            refreshDashboardData();
+            uiHandler.postDelayed(this, DASHBOARD_REFRESH_INTERVAL_MILLIS);
+        }
+    };
+
+    private final Runnable batteryRefreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+            refreshBatteryStatus();
+            uiHandler.postDelayed(this, BATTERY_REFRESH_INTERVAL_MILLIS);
+        }
+    };
+
     public MainShellController(View root) {
         this.root = root;
+        this.uiHandler = new Handler(Looper.getMainLooper());
+
         this.pageTitleView = root.findViewById(R.id.pageTitle);
         this.pageHostView = root.findViewById(R.id.pageHost);
+
+        // Create shared data providers
+        this.motionSensorProvider = new MotionSensorProvider(root.getContext());
+        this.motionSensorProvider.start();
+        this.batteryStatusProvider = new BatteryStatusProvider(root.getContext());
+        this.imuSpeedEstimator = new ImuSpeedEstimator();
+
+        // Initialize cached states
+        this.cachedImuState = new ImuSpeedState(0.0d, 0.0d,
+                com.example.vehicle_mountedsystem.model.AvailabilityStatus.unavailable("等待 IMU 初始化", 0L));
+        this.cachedBatteryStatus = batteryStatusProvider.readStatus(System.currentTimeMillis());
+
+        // Create page controllers
         this.dashboardPageController = new DashboardPageController();
         this.minimalVehiclePageController = new MinimalVehiclePageController();
         this.navigationPageController = new NavigationPageController();
-        this.sensorPageController = new SensorPageController();
+        this.sensorPageController = new SensorPageController(motionSensorProvider, imuSpeedEstimator);
         this.hvacPageController = new HvacPageController(new HvacRepository(root.getContext()));
         this.mediaPageController = new MediaPageController(new SystemMediaController(root.getContext()));
         this.vehicleControlPageController = new VehicleControlPageController();
         this.settingsPageController = new SettingsPageController();
         this.tabController = new TabController(root, this::handleTabSelection);
         this.tabController.selectTab(TabController.Tab.OVERVIEW);
+
+        // Start periodic data refresh
+        uiHandler.post(dashboardRefreshRunnable);
+        uiHandler.post(batteryRefreshRunnable);
     }
 
     private void handleTabSelection(TabController.Tab tab) {
+        stopCurrentPage();
         if (pageTitleView != null) {
             pageTitleView.setText(tab.getTitleResId());
         }
-        
+
         if (pageHostView == null) {
             return;
         }
@@ -61,6 +123,15 @@ public class MainShellController {
         pageHostView.removeAllViews();
         View pageView = createPageView(tab);
         pageHostView.addView(pageView);
+        currentTab = tab;
+    }
+
+    private void stopCurrentPage() {
+        if (currentTab == TabController.Tab.SENSORS) {
+            sensorPageController.stop();
+        } else if (currentTab == TabController.Tab.MEDIA) {
+            mediaPageController.stop();
+        }
     }
 
     private View createPageView(TabController.Tab tab) {
@@ -86,6 +157,95 @@ public class MainShellController {
         }
     }
 
+    // --- Periodic data refresh ---
+
+    private void refreshDashboardData() {
+        SensorReading linearAccel = motionSensorProvider.getLinearAccelerationReading();
+
+        // Compute gyro energy for ZUPT enhancement
+        SensorReading gyro = motionSensorProvider.getGyroscopeReading();
+        double gyroEnergy = 0.0d;
+        if (gyro != null && gyro.getAvailabilityStatus().isAvailable()) {
+            double gx = gyro.getX();
+            double gy = gyro.getY();
+            double gz = gyro.getZ();
+            gyroEnergy = Math.sqrt(gx * gx + gy * gy + gz * gz);
+        }
+        imuSpeedEstimator.setGyroEnergy(gyroEnergy);
+
+        if (linearAccel != null && linearAccel.getAvailabilityStatus().isAvailable()) {
+            cachedLinearAccelX = linearAccel.getX();
+            cachedLinearAccelY = linearAccel.getY();
+            long ts = linearAccel.getAvailabilityStatus().getTimestampMillis();
+            if (ts > 0L) {
+                // Coordinate alignment: rotate linear acceleration to world frame
+                double fwd = linearAccel.getX();
+                double lat = linearAccel.getY();
+                double vrt = linearAccel.getZ();
+
+                SensorReading rv = motionSensorProvider.getGameRotationVectorReading();
+                if (rv == null || !rv.getAvailabilityStatus().isAvailable()) {
+                    rv = motionSensorProvider.getRotationVectorReading();
+                }
+                if (rv != null && rv.getAvailabilityStatus().isAvailable()) {
+                    float rx = (float) rv.getX();
+                    float ry = (float) rv.getY();
+                    float rz = (float) rv.getZ();
+                    float rw = (float) Math.sqrt(Math.max(0.0, 1.0 - rx * rx - ry * ry - rz * rz));
+                    float[] rotVec = new float[]{rx, ry, rz, rw};
+                    float[] rotMat = new float[9];
+                    SensorManager.getRotationMatrixFromVector(rotMat, rotVec);
+
+                    // Remap: device Z (screen normal) → forward, device X → lateral
+                    float[] remapped = new float[9];
+                    SensorManager.remapCoordinateSystem(rotMat,
+                            SensorManager.AXIS_Z, SensorManager.AXIS_X, remapped);
+
+                    double dx = linearAccel.getX();
+                    double dy = linearAccel.getY();
+                    double dz = linearAccel.getZ();
+                    fwd = remapped[0] * dx + remapped[1] * dy + remapped[2] * dz;
+                    lat = remapped[3] * dx + remapped[4] * dy + remapped[5] * dz;
+                    vrt = remapped[6] * dx + remapped[7] * dy + remapped[8] * dz;
+                }
+
+                // Auto-calibrate on first valid sample
+                if (imuNeedsCalibration) {
+                    imuSpeedEstimator.calibrate();
+                    imuNeedsCalibration = false;
+                }
+                cachedImuState = imuSpeedEstimator.updateSample(fwd, lat, vrt, ts);
+            }
+        }
+
+        // If estimator is unavailable, use accelerometer for G-value fallback + direction
+        if (!imuSpeedEstimator.getAvailability().isAvailable()) {
+            SensorReading accel = motionSensorProvider.getAccelerometerReading();
+            if (accel != null && accel.getAvailabilityStatus().isAvailable()) {
+                cachedLinearAccelX = accel.getX();
+                cachedLinearAccelY = accel.getY();
+                double gValue = Math.sqrt(
+                        accel.getX() * accel.getX()
+                                + accel.getY() * accel.getY()
+                                + accel.getZ() * accel.getZ()) / 9.80665d;
+                cachedImuState = new ImuSpeedState(0.0d, gValue,
+                        com.example.vehicle_mountedsystem.model.AvailabilityStatus.available(
+                                "加速度计 G 值可用", accel.getAvailabilityStatus().getTimestampMillis()));
+            }
+        }
+        dashboardPageController.refresh(cachedBatteryStatus, cachedImuState,
+                cachedLinearAccelX, cachedLinearAccelY);
+        minimalVehiclePageController.refresh(cachedBatteryStatus, cachedImuState);
+        navigationPageController.refresh(cachedImuState);
+    }
+
+    private void refreshBatteryStatus() {
+        // Battery status uses a sticky intent, so we can refresh in-place
+        cachedBatteryStatus = batteryStatusProvider.readStatus(System.currentTimeMillis());
+    }
+
+    // --- Lifecycle ---
+
     private TextView createPlaceholder(TabController.Tab tab) {
         TextView placeholder = new TextView(root.getContext());
         placeholder.setLayoutParams(new FrameLayout.LayoutParams(
@@ -105,5 +265,13 @@ public class MainShellController {
 
     public TabController getTabController() {
         return tabController;
+    }
+
+    public void destroy() {
+        uiHandler.removeCallbacks(dashboardRefreshRunnable);
+        uiHandler.removeCallbacks(batteryRefreshRunnable);
+        stopCurrentPage();
+        motionSensorProvider.stop();
+        currentTab = null;
     }
 }

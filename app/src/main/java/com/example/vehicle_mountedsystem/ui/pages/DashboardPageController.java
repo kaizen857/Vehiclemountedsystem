@@ -11,10 +11,13 @@ import com.example.vehicle_mountedsystem.model.BatteryStatus;
 import com.example.vehicle_mountedsystem.model.HvacState;
 import com.example.vehicle_mountedsystem.model.ImuSpeedState;
 import com.example.vehicle_mountedsystem.model.VehicleState;
+import com.example.vehicle_mountedsystem.ui.GForceIndicatorView;
+import com.example.vehicle_mountedsystem.util.AnimationHelper;
 import com.example.vehicle_mountedsystem.util.UnitFormatter;
 
 public final class DashboardPageController {
-    private final VehicleState vehicleState;
+    private VehicleState vehicleState;
+    private View dashboardView;
 
     public DashboardPageController() {
         this(VehicleState.defaultState());
@@ -26,8 +29,51 @@ public final class DashboardPageController {
 
     public View createView(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.page_dashboard, parent, false);
+        dashboardView = view;
         bind(view);
+        AnimationHelper.playPageEnter(view);
         return view;
+    }
+
+    /**
+     * Called by MainShellController to push live data into the dashboard.
+     */
+    public void refresh(BatteryStatus batteryStatus, ImuSpeedState imuSpeedState,
+                        double linearAccelX, double linearAccelY) {
+        VehicleState updated = new VehicleState(
+                imuSpeedState.getSpeedMetersPerSecond(),
+                vehicleState.getGearState(),
+                vehicleState.getHvacState(),
+                batteryStatus,
+                imuSpeedState,
+                vehicleState.getMediaState());
+        this.vehicleState = updated;
+        if (dashboardView != null) {
+            bind(dashboardView);
+            GForceIndicatorView gForceView = dashboardView.findViewById(R.id.dashboardGForceIndicator);
+            if (gForceView != null) {
+                gForceView.updateGForce(
+                        (float) (linearAccelY / 9.80665d),
+                        (float) (linearAccelX / 9.80665d));
+            }
+        }
+    }
+
+    /**
+     * Update HVAC state from the HvacPageController (shared via MainShellController).
+     */
+    public void updateHvac(HvacState hvacState) {
+        VehicleState updated = new VehicleState(
+                vehicleState.getSpeedMetersPerSecond(),
+                vehicleState.getGearState(),
+                hvacState,
+                vehicleState.getBatteryStatus(),
+                vehicleState.getImuSpeedState(),
+                vehicleState.getMediaState());
+        this.vehicleState = updated;
+        if (dashboardView != null) {
+            bind(dashboardView);
+        }
     }
 
     private void bind(View view) {
@@ -41,7 +87,6 @@ public final class DashboardPageController {
         text(view, R.id.dashboardGearValue, vehicleState.getGearState().name());
         text(view, R.id.dashboardBatteryValue, UnitFormatter.formatBatteryPercent(batteryStatus.getPercent()));
         text(view, R.id.dashboardPowerValue, label(context, R.string.page_label_power, UnitFormatter.formatMilliwatts(batteryStatus.getPowerMilliwatts())));
-        text(view, R.id.dashboardGValue, label(context, R.string.page_label_g_value, UnitFormatter.formatGValue(imuSpeedState.getAccelerationG())));
         text(view, R.id.dashboardNavigationSummary, label(context, R.string.page_label_navigation, context.getString(R.string.navigation_demo_summary)));
         text(view, R.id.dashboardHvacSummary, label(context, R.string.page_label_hvac, hvacSummary(hvacState)));
     }
@@ -61,6 +106,8 @@ public final class DashboardPageController {
 
     private static void text(View view, int id, String value) {
         TextView textView = view.findViewById(id);
-        textView.setText(value);
+        if (textView != null) {
+            textView.setText(value);
+        }
     }
 }

@@ -77,10 +77,39 @@ public class SystemMediaControllerTest {
         assertTrue(sessionGateway.actions.isEmpty());
     }
 
+    @Test
+    public void snapshotListener_reflectsPlaybackStateChanges() {
+        FakeSessionGateway sessionGateway = new FakeSessionGateway(true, new SessionSnapshot("曲目", "艺术家", false));
+        FakeMediaKeyGateway mediaKeyGateway = new FakeMediaKeyGateway();
+        SystemMediaController controller = new SystemMediaController(sessionGateway, mediaKeyGateway);
+        List<MediaSnapshot> snapshots = new ArrayList<>();
+
+        controller.setSnapshotListener(snapshots::add);
+        sessionGateway.emit(new SessionSnapshot("曲目", "艺术家", true));
+
+        assertEquals(1, snapshots.size());
+        assertEquals(ConnectionMode.ACTIVE_SESSION, snapshots.get(0).getConnectionMode());
+        assertTrue(snapshots.get(0).getMediaState().isPlaying());
+    }
+
+    @Test
+    public void notificationAccess_requiresExactEnabledListenerPackage() {
+        String enabledListeners = "com.example.vehicle_mountedsystem.debug/com.example.Listener:" +
+                "com.example.vehicle_mountedsystem.extra/com.example.OtherListener";
+
+        assertFalse(SystemMediaController.hasPackageNotificationAccess(
+                enabledListeners,
+                "com.example.vehicle_mountedsystem"));
+        assertTrue(SystemMediaController.hasPackageNotificationAccess(
+                "com.example.vehicle_mountedsystem/com.example.Listener",
+                "com.example.vehicle_mountedsystem"));
+    }
+
     private static final class FakeSessionGateway implements SessionGateway {
         private final boolean notificationAccess;
         private final SessionSnapshot sessionSnapshot;
         private final List<TransportAction> actions = new ArrayList<>();
+        private SystemMediaController.SessionListener sessionListener;
 
         private FakeSessionGateway(boolean notificationAccess, SessionSnapshot sessionSnapshot) {
             this.notificationAccess = notificationAccess;
@@ -100,6 +129,15 @@ public class SystemMediaControllerTest {
         @Override
         public void dispatch(TransportAction action) {
             actions.add(action);
+        }
+
+        @Override
+        public void setSessionListener(SystemMediaController.SessionListener sessionListener) {
+            this.sessionListener = sessionListener;
+        }
+
+        private void emit(SessionSnapshot sessionSnapshot) {
+            sessionListener.onSessionChanged(sessionSnapshot);
         }
     }
 

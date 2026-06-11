@@ -52,13 +52,26 @@ public final class SystemMediaController {
         }
 
         return new MediaSnapshot(
-                new MediaState(
-                        textOrDefault(session.getTitle(), UNKNOWN_TITLE),
-                        textOrDefault(session.getArtist(), UNKNOWN_ARTIST),
-                        session.isPlaying(),
-                        AvailabilityStatus.available("已连接系统媒体会话", TIMESTAMP_MILLIS)),
+                toMediaState(session),
                 ConnectionMode.ACTIVE_SESSION,
                 "已连接系统媒体会话，可读取曲目信息并使用传输控制。");
+    }
+
+    public void setSnapshotListener(SnapshotListener snapshotListener) {
+        if (snapshotListener == null) {
+            sessionGateway.setSessionListener(null);
+            return;
+        }
+        sessionGateway.setSessionListener(session -> {
+            if (session == null) {
+                snapshotListener.onSnapshotChanged(loadSnapshot());
+                return;
+            }
+            snapshotListener.onSnapshotChanged(new MediaSnapshot(
+                    toMediaState(session),
+                    ConnectionMode.ACTIVE_SESSION,
+                    "已连接系统媒体会话，可读取曲目信息并使用传输控制。"));
+        });
     }
 
     public MediaSnapshot dispatch(TransportAction action) {
@@ -79,6 +92,28 @@ public final class SystemMediaController {
         return value;
     }
 
+    private static MediaState toMediaState(SessionSnapshot session) {
+        return new MediaState(
+                textOrDefault(session.getTitle(), UNKNOWN_TITLE),
+                textOrDefault(session.getArtist(), UNKNOWN_ARTIST),
+                session.isPlaying(),
+                AvailabilityStatus.available("已连接系统媒体会话", TIMESTAMP_MILLIS));
+    }
+
+    public static boolean hasPackageNotificationAccess(String enabledListeners, String packageName) {
+        if (enabledListeners == null || enabledListeners.trim().isEmpty()) {
+            return false;
+        }
+        String[] listenerNames = enabledListeners.split(":");
+        for (String listenerName : listenerNames) {
+            int separatorIndex = listenerName.indexOf('/');
+            if (separatorIndex > 0 && packageName.equals(listenerName.substring(0, separatorIndex))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public enum ConnectionMode {
         ACTIVE_SESSION,
         MEDIA_KEY_FALLBACK,
@@ -97,6 +132,17 @@ public final class SystemMediaController {
         SessionSnapshot getActiveSession();
 
         void dispatch(TransportAction action);
+
+        default void setSessionListener(SessionListener sessionListener) {
+        }
+    }
+
+    public interface SessionListener {
+        void onSessionChanged(SessionSnapshot sessionSnapshot);
+    }
+
+    public interface SnapshotListener {
+        void onSnapshotChanged(MediaSnapshot mediaSnapshot);
     }
 
     public interface MediaKeyGateway {
@@ -155,6 +201,23 @@ public final class SystemMediaController {
         private final Context context;
         private final MediaSessionManager sessionManager;
         private MediaController activeController;
+        private SessionListener sessionListener;
+        private boolean activeSessionsListenerRegistered;
+        private final MediaController.Callback controllerCallback = new MediaController.Callback() {
+            @Override
+            public void onPlaybackStateChanged(PlaybackState state) {
+                notifyActiveSessionChanged();
+            }
+
+            @Override
+            public void onMetadataChanged(MediaMetadata metadata) {
+                notifyActiveSessionChanged();
+            }
+        };
+        private final MediaSessionManager.OnActiveSessionsChangedListener activeSessionsChangedListener = controllers -> {
+            setActiveController(selectController(controllers));
+            notifyActiveSessionChanged();
+        };
 
         private AndroidSessionGateway(Context context) {
             this.context = context;
@@ -166,8 +229,7 @@ public final class SystemMediaController {
             String enabledListeners = Settings.Secure.getString(
                     context.getContentResolver(),
                     "enabled_notification_listeners");
-            String packageName = context.getPackageName();
-            return enabledListeners != null && enabledListeners.contains(packageName);
+            return SystemMediaController.hasPackageNotificationAccess(enabledListeners, context.getPackageName());
         }
 
         @Override
@@ -180,20 +242,37 @@ public final class SystemMediaController {
                 List<MediaController> controllers = sessionManager.getActiveSessions(new ComponentName(
                         context,
                         MediaNotificationListenerService.class));
-                activeController = firstController(controllers);
+                setActiveController(selectController(controllers));
                 if (activeController == null) {
                     return null;
                 }
-                MediaMetadata metadata = activeController.getMetadata();
-                PlaybackState playbackState = activeController.getPlaybackState();
-                String title = metadata == null ? UNKNOWN_TITLE : metadata.getString(MediaMetadata.METADATA_KEY_TITLE);
-                String artist = metadata == null ? UNKNOWN_ARTIST : metadata.getString(MediaMetadata.METADATA_KEY_ARTIST);
-                boolean playing = playbackState != null
-                        && playbackState.getState() == PlaybackState.STATE_PLAYING;
-                return new SessionSnapshot(title, artist, playing);
+                return snapshotFrom(activeController);
             } catch (SecurityException ignored) {
                 activeController = null;
                 return null;
+            }
+        }
+
+        @Override
+        public void setSessionListener(SessionListener sessionListener) {
+            this.sessionListener = sessionListener;
+            if (sessionManager == null) {
+                return;
+            }
+            ComponentName componentName = new ComponentName(context, MediaNotificationListenerService.class);
+            try {
+                if (sessionListener == null) {
+                    if (activeSessionsListenerRegistered) {
+                        sessionManager.removeOnActiveSessionsChangedListener(activeSessionsChangedListener);
+                        activeSessionsListenerRegistered = false;
+                    }
+                    setActiveController(null);
+                } else if (!activeSessionsListenerRegistered) {
+                    sessionManager.addOnActiveSessionsChangedListener(activeSessionsChangedListener, componentName);
+                    activeSessionsListenerRegistered = true;
+                }
+            } catch (SecurityException ignored) {
+                setActiveController(null);
             }
         }
 
@@ -222,12 +301,55 @@ public final class SystemMediaController {
             }
         }
 
-        private static MediaController firstController(List<MediaController> controllers) {
+        private void setActiveController(MediaController controller) {
+            if (activeController == controller) {
+                return;
+            }
+            if (activeController != null) {
+                activeController.unregisterCallback(controllerCallback);
+            }
+            activeController = controller;
+            if (activeController != null) {
+                activeController.registerCallback(controllerCallback);
+            }
+        }
+
+        private void notifyActiveSessionChanged() {
+            if (sessionListener != null) {
+                sessionListener.onSessionChanged(snapshotFrom(activeController));
+            }
+        }
+
+        private static SessionSnapshot snapshotFrom(MediaController controller) {
+            if (controller == null) {
+                return null;
+            }
+            MediaMetadata metadata = controller.getMetadata();
+            PlaybackState playbackState = controller.getPlaybackState();
+            String title = metadata == null ? UNKNOWN_TITLE : metadata.getString(MediaMetadata.METADATA_KEY_TITLE);
+            String artist = metadata == null ? UNKNOWN_ARTIST : metadata.getString(MediaMetadata.METADATA_KEY_ARTIST);
+            boolean playing = playbackState != null && playbackState.getState() == PlaybackState.STATE_PLAYING;
+            return new SessionSnapshot(title, artist, playing);
+        }
+
+        private static MediaController selectController(List<MediaController> controllers) {
             if (controllers == null || controllers.isEmpty()) {
                 return null;
             }
+            for (MediaController controller : controllers) {
+                PlaybackState playbackState = controller.getPlaybackState();
+                if (playbackState != null && playbackState.getState() == PlaybackState.STATE_PLAYING) {
+                    return controller;
+                }
+            }
+            for (MediaController controller : controllers) {
+                if (controller.getPlaybackState() != null || controller.getMetadata() != null) {
+                    return controller;
+                }
+            }
             return controllers.get(0);
         }
+
     }
 
     private static final class AndroidMediaKeyGateway implements MediaKeyGateway {

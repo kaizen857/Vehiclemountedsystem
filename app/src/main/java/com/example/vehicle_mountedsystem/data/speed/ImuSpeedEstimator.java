@@ -11,6 +11,8 @@ public final class ImuSpeedEstimator {
     private static final int ZERO_SPEED_SAMPLE_COUNT = 5;
     private static final long MAX_SAMPLE_GAP_MILLIS = 500L;
     private static final double GRAVITY_MPS2 = 9.80665d;
+    private static final double GYRO_STILL_THRESHOLD_RADS = 0.06d;
+    private static final double BIAS_LEARNING_RATE = 0.001d;
     private static final String NEED_RESET_MESSAGE = "IMU 速度估算不可用/需重置";
 
     private double speedMps;
@@ -21,6 +23,7 @@ public final class ImuSpeedEstimator {
     private long lastTimestampMillis = -1L;
     private boolean calibrating;
     private boolean calibrationValid;
+    private double lastGyroEnergy;
     private AvailabilityStatus availability = AvailabilityStatus.unavailable(NEED_RESET_MESSAGE, 0L);
 
     public void calibrate() {
@@ -43,6 +46,10 @@ public final class ImuSpeedEstimator {
         availability = calibrationValid
                 ? AvailabilityStatus.available("IMU 速度已重置", 0L)
                 : AvailabilityStatus.unavailable(NEED_RESET_MESSAGE, 0L);
+    }
+
+    public void setGyroEnergy(double gyroEnergy) {
+        this.lastGyroEnergy = gyroEnergy;
     }
 
     public ImuSpeedState updateSample(double linearAccelerationMps2, long timestampMillis) {
@@ -113,8 +120,14 @@ public final class ImuSpeedEstimator {
     }
 
     private void applyZeroSpeedCorrection(double correctedAcceleration) {
-        if (Math.abs(correctedAcceleration) <= STILL_ACCELERATION_THRESHOLD_MPS2) {
+        boolean accelStill = Math.abs(correctedAcceleration) <= STILL_ACCELERATION_THRESHOLD_MPS2;
+        boolean gyroStill = lastGyroEnergy <= GYRO_STILL_THRESHOLD_RADS;
+        if (accelStill && gyroStill) {
             stillSamples++;
+            biasMps2 += BIAS_LEARNING_RATE * correctedAcceleration;
+            if (Math.abs(biasMps2) > MAX_REASONABLE_BIAS_MPS2) {
+                biasMps2 = Math.signum(biasMps2) * MAX_REASONABLE_BIAS_MPS2;
+            }
         } else {
             stillSamples = 0;
         }

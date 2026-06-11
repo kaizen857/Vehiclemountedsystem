@@ -39,7 +39,8 @@ public class MotionSensorProviderTest {
                 MotionSensorProvider.SENSOR_ACCELEROMETER,
                 MotionSensorProvider.SENSOR_LINEAR_ACCELERATION,
                 MotionSensorProvider.SENSOR_GYROSCOPE,
-                MotionSensorProvider.SENSOR_ROTATION_VECTOR
+                MotionSensorProvider.SENSOR_ROTATION_VECTOR,
+                MotionSensorProvider.SENSOR_GAME_ROTATION_VECTOR
         }, source.requestedSensorTypes);
         assertEquals("加速度计", accelerometer.getName());
         assertEquals("m/s²", accelerometer.getUnit());
@@ -63,11 +64,28 @@ public class MotionSensorProviderTest {
 
         provider.start();
 
-        assertTrue(provider.getAccelerometerReading().getAvailabilityStatus().isAvailable() == false);
+        assertTrue(provider.getAccelerometerReading().getAvailabilityStatus().isAvailable());
+        assertEquals("等待加速度计数据", provider.getAccelerometerReading().getAvailabilityStatus().getMessage());
         assertFalse(provider.getLinearAccelerationReading().getAvailabilityStatus().isAvailable());
         assertEquals("线性加速度不可用", provider.getLinearAccelerationReading().getAvailabilityStatus().getMessage());
         provider.stop();
         assertFalse(source.started);
+    }
+
+    @Test
+    public void sample_notifiesReadingListenerWithUpdatedAvailability() {
+        FakeMotionSensorSource source = new FakeMotionSensorSource(MotionSensorProvider.SENSOR_ACCELEROMETER);
+        MotionSensorProvider provider = new MotionSensorProvider(source);
+        int[] callbackCount = new int[1];
+
+        provider.setReadingListener(updatedProvider -> callbackCount[0]++);
+        provider.start();
+        source.emit(new MotionSensorProvider.SensorSample(MotionSensorProvider.SENSOR_ACCELEROMETER, 4.0d, 5.0d, 6.0d, 200L));
+
+        assertEquals(2, callbackCount[0]);
+        assertTrue(provider.getAccelerometerReading().getAvailabilityStatus().isAvailable());
+        assertEquals(4.0d, provider.getAccelerometerReading().getX(), 0.0d);
+        assertEquals(200L, provider.getAccelerometerReading().getAvailabilityStatus().getTimestampMillis());
     }
 
     private static final class FakeMotionSensorSource implements MotionSensorProvider.MotionSensorSource {

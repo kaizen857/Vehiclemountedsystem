@@ -100,44 +100,125 @@
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Attitude Indicator (artificial horizon) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/page_card_gap"
+            android:background="@color/card_panel_alt_bg"
+            android:orientation="vertical"
+            android:padding="@dimen/page_card_padding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="姿态仪表"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/page_label_text_size" />
+
+            <com.example.vehicle_mountedsystem.ui.AttitudeIndicatorView
+                android:id="@+id/sensorAttitudeIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/page_micro_gap"
+                android:layout_weight="1"
+                android:minHeight="220dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/page_micro_gap"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="来源: 硬件融合姿态 (旋转向量传感器)"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/page_label_text_size" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/sensorFlipPitch"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:minHeight="0dp"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:text="翻转俯仰"
+                    android:textSize="@dimen/page_label_text_size" />
+
+                <Button
+                    android:id="@+id/sensorFlipRoll"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:text="翻转横滚"
+                    android:textSize="@dimen/page_label_text_size" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/sensorImuCalibrate"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:minHeight="0dp"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:text="校准速度"
+                    android:textSize="@dimen/page_label_text_size" />
+
+                <Button
+                    android:id="@+id/sensorAttitudeCalibrate"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:minHeight="0dp"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:text="校准姿态"
+                    android:textSize="@dimen/page_label_text_size" />
+
+                <Button
+                    android:id="@+id/sensorImuReset"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="0dp"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:text="重置速度"
+                    android:textSize="@dimen/page_label_text_size" />
+            </LinearLayout>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/page_card_gap"
             android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/page_card_gap"
-                android:layout_weight="1"
-                android:background="@color/card_panel_bg"
-                android:orientation="vertical"
-                android:padding="@dimen/page_card_padding">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/page_label_gyroscope"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/page_label_text_size" />
-
-                <TextView
-                    android:id="@+id/sensorGyroscopeValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
-                    android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_value_text_size" />
-
-                <TextView
-                    android:id="@+id/sensorGyroscopeStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
-                    android:textColor="@color/accent_amber"
-                    android:textSize="@dimen/page_status_text_size" />
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"

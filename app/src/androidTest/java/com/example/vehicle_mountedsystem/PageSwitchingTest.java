@@ -157,9 +157,9 @@ public class PageSwitchingTest {
     }
 
     private static void assertMediaStateVisible() {
-        assertText(R.id.mediaTitleValue, "无媒体");
-        assertText(R.id.mediaArtistValue, "未知艺术家");
-        assertText(R.id.mediaPlaybackValue, "已暂停/未播放");
+        assertNonEmptyText(R.id.mediaTitleValue);
+        assertNonEmptyText(R.id.mediaArtistValue);
+        assertNonEmptyText(R.id.mediaPlaybackValue);
         assertNonEmptyText(R.id.mediaConnectionModeValue);
         assertNonEmptyText(R.id.mediaStatusMessage);
     }

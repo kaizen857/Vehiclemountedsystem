@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pageMinimalVehicleRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:padding="@dimen/page_card_gap">
 
     <TextView
         android:id="@+id/minimalPageTitle"
@@ -12,22 +13,49 @@
         android:text="@string/page_minimal_badge"
         android:textColor="@color/accent_blue"
         android:textSize="@dimen/page_title_text_size"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/minimalSpeedValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/page_section_gap"
-        android:textColor="@color/text_primary"
-        android:textSize="@dimen/page_speed_text_size"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/speedCenterContainer"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/page_card_gap"
-        android:orientation="horizontal">
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottomPanel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/minimalSpeedValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="112sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/minimalImuStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/page_micro_gap"
+            android:textColor="@color/accent_amber"
+            android:textSize="@dimen/page_status_text_size" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomPanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/page_section_gap"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/statusPanel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.7">
 
         <TextView
             android:id="@+id/minimalGearValue"
@@ -35,10 +63,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/page_card_gap"
             android:layout_weight="1"
-            android:background="@color/card_panel_bg"
+            android:background="@drawable/bg_card_rounded"
+            android:gravity="center"
             android:padding="@dimen/page_card_padding"
             android:textColor="@color/accent_cyan"
-            android:textSize="@dimen/page_value_text_size" />
+            android:textSize="@dimen/page_value_text_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/minimalBatteryValue"
@@ -46,66 +76,77 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/page_card_gap"
             android:layout_weight="1"
-            android:background="@color/card_panel_bg"
+            android:background="@drawable/bg_card_rounded"
+            android:gravity="center"
             android:padding="@dimen/page_card_padding"
             android:textColor="@color/text_primary"
-            android:textSize="@dimen/page_value_text_size" />
+            android:textSize="@dimen/page_value_text_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/minimalPowerValue"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/card_panel_bg"
+            android:background="@drawable/bg_card_rounded"
+            android:gravity="center"
             android:padding="@dimen/page_card_padding"
             android:textColor="@color/text_primary"
             android:textSize="@dimen/page_value_text_size" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/minimalHealthStatus"
+    <LinearLayout
+        android:id="@+id/statusPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/page_card_gap"
-        android:background="@color/card_panel_alt_bg"
-        android:padding="@dimen/page_card_padding"
-        android:textColor="@color/accent_green"
-        android:textSize="@dimen/page_value_text_size"
-        android:textStyle="bold" />
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <TextView
-        android:id="@+id/minimalSensorAvailability"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/page_card_gap"
-        android:background="@color/card_panel_bg"
-        android:padding="@dimen/page_card_padding"
-        android:textColor="@color/text_primary"
-        android:textSize="@dimen/page_status_text_size" />
+        <TextView
+            android:id="@+id/minimalHealthStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/page_card_gap"
+            android:background="@drawable/bg_card_rounded"
+            android:padding="@dimen/page_card_padding"
+            android:textColor="@color/accent_green"
+            android:textSize="@dimen/page_status_text_size"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/minimalImuStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/page_card_gap"
-        android:background="@color/card_panel_bg"
-        android:padding="@dimen/page_card_padding"
-        android:textColor="@color/accent_amber"
-        android:textSize="@dimen/page_status_text_size" />
+        <TextView
+            android:id="@+id/minimalSensorAvailability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/page_card_gap"
+            android:background="@drawable/bg_card_rounded"
+            android:padding="@dimen/page_card_padding"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/page_status_text_size" />
 
-    <TextView
-        android:id="@+id/minimalSystemTime"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/page_card_gap"
-        android:textColor="@color/text_secondary"
-        android:textSize="@dimen/page_status_text_size" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/minimalDemoMode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/page_micro_gap"
-        android:textColor="@color/text_secondary"
-        android:textSize="@dimen/page_status_text_size" />
-</LinearLayout>
+            <TextView
+                android:id="@+id/minimalSystemTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/page_status_text_size" />
+
+            <TextView
+                android:id="@+id/minimalDemoMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/page_micro_gap"
+                android:textColor="@color/text_secondary"
+                android:textSize="10sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

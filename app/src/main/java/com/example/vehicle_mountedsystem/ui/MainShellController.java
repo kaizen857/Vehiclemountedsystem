@@ -84,13 +84,14 @@ public class MainShellController {
 
         // Create shared data providers
         this.motionSensorProvider = new MotionSensorProvider(root.getContext());
+        this.imuSpeedEstimator = new ImuSpeedEstimator();
+        this.motionSensorProvider.setHighFrequencyListener(this.imuSpeedEstimator);
         this.motionSensorProvider.start();
         this.batteryStatusProvider = new BatteryStatusProvider(root.getContext());
-        this.imuSpeedEstimator = new ImuSpeedEstimator();
 
         // Initialize cached states
         this.cachedImuState = new ImuSpeedState(0.0d, 0.0d,
-                com.example.vehicle_mountedsystem.model.AvailabilityStatus.unavailable("等待 IMU 初始化", 0L));
+                com.example.vehicle_mountedsystem.model.AvailabilityStatus.unavailable("正在启动系统", 0L));
         this.cachedBatteryStatus = batteryStatusProvider.readStatus(System.currentTimeMillis());
 
         // Create page controllers
@@ -160,66 +161,15 @@ public class MainShellController {
     // --- Periodic data refresh ---
 
     private void refreshDashboardData() {
-        SensorReading linearAccel = motionSensorProvider.getLinearAccelerationReading();
-
-        // Compute gyro energy for ZUPT enhancement
-        SensorReading gyro = motionSensorProvider.getGyroscopeReading();
-        double gyroEnergy = 0.0d;
-        if (gyro != null && gyro.getAvailabilityStatus().isAvailable()) {
-            double gx = gyro.getX();
-            double gy = gyro.getY();
-            double gz = gyro.getZ();
-            gyroEnergy = Math.sqrt(gx * gx + gy * gy + gz * gz);
+        if (imuNeedsCalibration) {
+            imuSpeedEstimator.calibrate();
+            imuNeedsCalibration = false;
         }
-        imuSpeedEstimator.setGyroEnergy(gyroEnergy);
 
-        if (linearAccel != null && linearAccel.getAvailabilityStatus().isAvailable()) {
-            cachedLinearAccelX = linearAccel.getX();
-            cachedLinearAccelY = linearAccel.getY();
-            long ts = linearAccel.getAvailabilityStatus().getTimestampMillis();
-            if (ts > 0L) {
-                // Coordinate alignment: rotate linear acceleration to world frame
-                double fwd = linearAccel.getX();
-                double lat = linearAccel.getY();
-                double vrt = linearAccel.getZ();
-
-                SensorReading rv = motionSensorProvider.getGameRotationVectorReading();
-                if (rv == null || !rv.getAvailabilityStatus().isAvailable()) {
-                    rv = motionSensorProvider.getRotationVectorReading();
-                }
-                if (rv != null && rv.getAvailabilityStatus().isAvailable()) {
-                    float rx = (float) rv.getX();
-                    float ry = (float) rv.getY();
-                    float rz = (float) rv.getZ();
-                    float rw = (float) Math.sqrt(Math.max(0.0, 1.0 - rx * rx - ry * ry - rz * rz));
-                    float[] rotVec = new float[]{rx, ry, rz, rw};
-                    float[] rotMat = new float[9];
-                    SensorManager.getRotationMatrixFromVector(rotMat, rotVec);
-
-                    // Remap: device Z (screen normal) → forward, device X → lateral
-                    float[] remapped = new float[9];
-                    SensorManager.remapCoordinateSystem(rotMat,
-                            SensorManager.AXIS_Z, SensorManager.AXIS_X, remapped);
-
-                    double dx = linearAccel.getX();
-                    double dy = linearAccel.getY();
-                    double dz = linearAccel.getZ();
-                    fwd = remapped[0] * dx + remapped[1] * dy + remapped[2] * dz;
-                    lat = remapped[3] * dx + remapped[4] * dy + remapped[5] * dz;
-                    vrt = remapped[6] * dx + remapped[7] * dy + remapped[8] * dz;
-                }
-
-                // Auto-calibrate on first valid sample
-                if (imuNeedsCalibration) {
-                    imuSpeedEstimator.calibrate();
-                    imuNeedsCalibration = false;
-                }
-                cachedImuState = imuSpeedEstimator.updateSample(fwd, lat, vrt, ts);
-            }
-        }
+        cachedImuState = imuSpeedEstimator.getCurrentState();
 
         // If estimator is unavailable, use accelerometer for G-value fallback + direction
-        if (!imuSpeedEstimator.getAvailability().isAvailable()) {
+        if (!cachedImuState.getAvailabilityStatus().isAvailable()) {
             SensorReading accel = motionSensorProvider.getAccelerometerReading();
             if (accel != null && accel.getAvailabilityStatus().isAvailable()) {
                 cachedLinearAccelX = accel.getX();
@@ -230,7 +180,15 @@ public class MainShellController {
                                 + accel.getZ() * accel.getZ()) / 9.80665d;
                 cachedImuState = new ImuSpeedState(0.0d, gValue,
                         com.example.vehicle_mountedsystem.model.AvailabilityStatus.available(
-                                "加速度计 G 值可用", accel.getAvailabilityStatus().getTimestampMillis()));
+                                "合成 G 值已就绪", accel.getAvailabilityStatus().getTimestampMillis()));
+            }
+        } else {
+            // Keep UI directions aligned if IMU is available, we might not have fwd/lat anymore.
+            // We can just rely on raw accelerometer or linear accel for UI indicators.
+            SensorReading linearAccel = motionSensorProvider.getLinearAccelerationReading();
+            if (linearAccel != null && linearAccel.getAvailabilityStatus().isAvailable()) {
+                cachedLinearAccelX = linearAccel.getX();
+                cachedLinearAccelY = linearAccel.getY();
             }
         }
         dashboardPageController.refresh(cachedBatteryStatus, cachedImuState,

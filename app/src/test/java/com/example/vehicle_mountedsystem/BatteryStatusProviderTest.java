@@ -20,7 +20,7 @@ public class BatteryStatusProviderTest {
         assertEquals(50, status.getPercent());
         assertEquals(-2000, status.getPowerMilliwatts());
         assertTrue(status.getAvailabilityStatus().isAvailable());
-        assertEquals("手机电池状态可用", status.getAvailabilityStatus().getMessage());
+        assertEquals("动力系统电量正常", status.getAvailabilityStatus().getMessage());
         assertEquals(22L, status.getAvailabilityStatus().getTimestampMillis());
     }
 
@@ -34,7 +34,7 @@ public class BatteryStatusProviderTest {
         assertEquals(80, status.getPercent());
         assertEquals(0, status.getPowerMilliwatts());
         assertTrue(status.getAvailabilityStatus().isAvailable());
-        assertEquals("手机电量可用，功率估算不可用", status.getAvailabilityStatus().getMessage());
+        assertEquals("电池电量已就绪，功率估算同步中", status.getAvailabilityStatus().getMessage());
     }
 
     @Test
@@ -47,7 +47,7 @@ public class BatteryStatusProviderTest {
         BatteryStatus invalid = invalidProvider.readStatus(41L);
 
         assertFalse(missing.getAvailabilityStatus().isAvailable());
-        assertEquals("手机电池状态不可用", missing.getAvailabilityStatus().getMessage());
+        assertEquals("动力系统状态不可用", missing.getAvailabilityStatus().getMessage());
         assertEquals(0, missing.getPercent());
         assertFalse(invalid.getAvailabilityStatus().isAvailable());
         assertEquals(41L, invalid.getAvailabilityStatus().getTimestampMillis());

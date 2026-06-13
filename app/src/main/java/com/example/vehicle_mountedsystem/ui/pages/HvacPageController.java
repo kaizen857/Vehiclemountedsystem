@@ -60,7 +60,7 @@ public final class HvacPageController {
         temperatureValue.setText(state.getTemperatureCelsius() + "°C");
         fanValue.setText(String.valueOf(state.getFanLevel()));
         modeValue.setText(state.getModeLabel());
-        acState.setText(state.isAcEnabled() ? "AC 开启" : "AC 关闭");
+        acState.setText(state.isAcEnabled() ? "AC 已开启" : "AC 已关闭");
         circulationState.setText(state.isInnerCirculationEnabled() ? "内循环" : "外循环");
         capabilityMessage.setText(R.string.hvac_ir_capability_local_only);
     }

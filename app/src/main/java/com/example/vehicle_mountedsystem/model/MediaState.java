@@ -1,22 +1,25 @@
 package com.example.vehicle_mountedsystem.model;
 
+import android.graphics.Bitmap;
 import java.util.Objects;
 
 public final class MediaState {
     private final String title;
     private final String artist;
     private final boolean playing;
+    private final Bitmap albumArt;
     private final AvailabilityStatus availabilityStatus;
 
-    public MediaState(String title, String artist, boolean playing, AvailabilityStatus availabilityStatus) {
+    public MediaState(String title, String artist, boolean playing, Bitmap albumArt, AvailabilityStatus availabilityStatus) {
         this.title = requireText(title, "title");
         this.artist = requireText(artist, "artist");
         this.playing = playing;
+        this.albumArt = albumArt;
         this.availabilityStatus = Objects.requireNonNull(availabilityStatus, "availabilityStatus");
     }
 
     public static MediaState defaultState() {
-        return new MediaState("无媒体", "未知艺术家", false, AvailabilityStatus.unavailable());
+        return new MediaState("无媒体", "未知艺术家", false, null, AvailabilityStatus.unavailable());
     }
 
     public String getTitle() {
@@ -29,6 +32,10 @@ public final class MediaState {
 
     public boolean isPlaying() {
         return playing;
+    }
+
+    public Bitmap getAlbumArt() {
+        return albumArt;
     }
 
     public AvailabilityStatus getAvailabilityStatus() {
@@ -54,11 +61,12 @@ public final class MediaState {
         return playing == that.playing
                 && title.equals(that.title)
                 && artist.equals(that.artist)
+                && Objects.equals(albumArt, that.albumArt)
                 && availabilityStatus.equals(that.availabilityStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, artist, playing, availabilityStatus);
+        return Objects.hash(title, artist, playing, albumArt, availabilityStatus);
     }
 }

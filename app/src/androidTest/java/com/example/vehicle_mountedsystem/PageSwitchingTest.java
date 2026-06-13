@@ -70,7 +70,7 @@ public class PageSwitchingTest {
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
             onView(withId(R.id.tabHvac)).perform(click());
             assertPage(R.id.pageHvacRoot, R.id.hvacPageTitle, R.string.title_hvac, R.string.page_hvac_badge);
-            assertHvacState("24°C", "2", "自动", "AC 关闭", "外循环");
+            assertHvacState("24°C", "2", "自动", "AC 已关闭", "外循环");
             assertCapabilityMessage();
 
             onView(withId(R.id.hvacTemperatureIncrease)).perform(scrollTo(), click());
@@ -79,12 +79,12 @@ public class PageSwitchingTest {
             onView(withId(R.id.hvacModeCool)).perform(scrollTo(), click());
             onView(withId(R.id.hvacAcToggle)).perform(scrollTo(), click());
             onView(withId(R.id.hvacCirculationToggle)).perform(scrollTo(), click());
-            assertHvacState("26°C", "3", "制冷", "AC 开启", "内循环");
+            assertHvacState("26°C", "3", "制冷", "AC 已开启", "内循环");
 
             scenario.recreate();
             onView(withId(R.id.tabHvac)).perform(click());
             assertPage(R.id.pageHvacRoot, R.id.hvacPageTitle, R.string.title_hvac, R.string.page_hvac_badge);
-            assertHvacState("26°C", "3", "制冷", "AC 开启", "内循环");
+            assertHvacState("26°C", "3", "制冷", "AC 已开启", "内循环");
             assertCapabilityMessage();
         }
     }
@@ -96,25 +96,25 @@ public class PageSwitchingTest {
             assertPage(R.id.pageControlRoot, R.id.controlPageTitle, R.string.title_controls, R.string.page_control_badge);
             onView(allOf(withId(R.id.controlDemoNotice), withText(R.string.control_demo_notice))).check(matches(isDisplayed()));
             assertControlState(
-                    "本地演示：左前窗已关闭",
-                    "本地演示：左后视镜已展开",
-                    "本地演示：座椅加热已关闭");
+                    "左前窗：已关闭",
+                    "左后视镜：已展开",
+                    "座椅加热：已关闭");
 
             onView(withId(R.id.windowFrontLeftAction)).perform(scrollTo(), click());
             onView(withId(R.id.mirrorLeftAction)).perform(scrollTo(), click());
             onView(withId(R.id.seatHeatAction)).perform(scrollTo(), click());
             assertControlState(
-                    "本地演示：左前窗已打开",
-                    "本地演示：左后视镜已折叠",
-                    "本地演示：座椅加热已开启");
+                    "左前窗：已开启",
+                    "左后视镜：已折叠",
+                    "座椅加热：已开启");
 
             scenario.recreate();
             onView(withId(R.id.tabControls)).perform(click());
             assertPage(R.id.pageControlRoot, R.id.controlPageTitle, R.string.title_controls, R.string.page_control_badge);
             assertControlState(
-                    "本地演示：左前窗已打开",
-                    "本地演示：左后视镜已折叠",
-                    "本地演示：座椅加热已开启");
+                    "左前窗：已开启",
+                    "左后视镜：已折叠",
+                    "座椅加热：已开启");
         }
     }
 

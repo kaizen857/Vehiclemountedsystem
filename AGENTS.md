@@ -12,7 +12,7 @@
 ## 构建与验证
 
 - 必须使用仓库 wrapper：`./gradlew`。不要改用系统 Gradle。
-- Toolchain：Gradle wrapper 9.4.1，`gradle/gradle-daemon-jvm.properties` 指定 daemon JDK 21，AGP 9.2.1，Java 11。
+- Toolchain：Gradle wrapper 9.4.1，`gradle/gradle-daemon-jvm.properties` 和 `foojay-resolver-convention` 插件指定 daemon JDK 21，AGP 9.2.1，Java 11。
 - Android 配置在 `app/build.gradle.kts`：`compileSdk = release(36) { minorApiLevel = 1 }`，`targetSdk = 36`，`minSdk = 24`。
 - 依赖通过 `gradle/libs.versions.toml` 管理；`settings.gradle.kts` 使用 `RepositoriesMode.FAIL_ON_PROJECT_REPOS`，不要在模块里临时加仓库。
 - 常用命令：
@@ -36,7 +36,7 @@
 - 数据提供者要保持可注入：Android 便捷构造函数 + 接口构造函数，便于本地单测注入 fake。
 - 已有模式：`MotionSensorProvider.MotionSensorSource`、`HvacStorage`、`BatteryStatusProvider.BatteryDataSource`、`SystemMediaController.SessionGateway/MediaKeyGateway`。
 - UI 层不要收到 `null` 状态；用 `AvailabilityStatus.available/unavailable(message, timestamp)` 表达可用性和中文降级文案。
-- `ImuSpeedEstimator` 是纯 Java 类；速度单位是 m/s，UI 文案必须是“IMU 估算速度”或“短时估算速度”，不要写“真实车速”。
+- `ImuSpeedEstimator` 是纯 Java 类；速度单位是 m/s，UI 文案必须是“IMU 估算速度”或“短时估算速度”，不要写“真实车速”。IMU 漂移抑制(如坐标系对齐、ZUPT检测)必须严格遵循 `IMU_DRIFT_MITIGATION.md` 的路线，不要跳过基础对齐直接上 Kalman 滤波。
 - 空调基础版只维护本地状态机并用 `SharedPreferences` 持久化；不要提前加入 `ConsumerIrManager`、红外权限或红外码库。
 - 控制页车窗/后视镜/座椅是本地演示状态，不代表真实车辆控制。
 
@@ -51,7 +51,7 @@
 
 ## UI 约束
 
-- 主题是 Material 3：`Theme.Material3.DayNight.NoActionBar`，冷色科技风暗色主题。
+- 主题是 `Theme.VehiclemountedSystem` (继承自 Material 3：`Theme.Material3.DayNight.NoActionBar`)，冷色科技风暗色主题。
 - 关键颜色：`@color/bg_dark` `#0B0F19`，`@color/accent_cyan` `#06B6D4`，`@color/accent_blue` `#38BDF8`。
 - 不要在 UI 文件里引入 Material 2 主题或浅色默认风格；新增页面优先复用现有颜色、dimens、卡片/标签文案模式。
 

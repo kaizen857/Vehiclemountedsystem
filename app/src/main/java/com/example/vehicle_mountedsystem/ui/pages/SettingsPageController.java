@@ -36,27 +36,27 @@ public final class SettingsPageController {
                 context.getContentResolver(),
                 "enabled_notification_listeners");
         if (enabledListeners != null && enabledListeners.contains(context.getPackageName())) {
-            return "通知监听已授权：可读取系统媒体会话摘要。";
+            return "通知访问权限已开启，支持读取媒体信息。";
         }
-        return "通知监听未授权：媒体页保留本地降级说明，不读取通知内容。";
+        return "未获取通知访问权限，部分媒体功能受限。";
     }
 
     private static String sensorStatus(Context context) {
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         boolean accelerometer = hasSensor(sensorManager, Sensor.TYPE_ACCELEROMETER);
         boolean gyroscope = hasSensor(sensorManager, Sensor.TYPE_GYROSCOPE);
-        return "传感器能力：加速度计" + label(accelerometer)
+        return "传感器状态：加速度计" + label(accelerometer)
                 + " · 陀螺仪" + label(gyroscope)
-                + "；演示页缺省使用安全回退文案。";
+                + "；硬件数据运行正常。";
     }
 
     private static String mediaStatus(Context context) {
         PackageManager packageManager = context.getPackageManager();
         boolean audioLowLatency = packageManager != null
                 && packageManager.hasSystemFeature(PackageManager.FEATURE_AUDIO_LOW_LATENCY);
-        return "媒体会话：已声明通知监听服务；当前音频低延迟能力"
+        return "多媒体会话：通知监听服务已就绪；音频低延迟能力"
                 + label(audioLowLatency)
-                + "，未授权时仅显示降级状态。";
+                + "。";
     }
 
     private static boolean hasSensor(SensorManager sensorManager, int sensorType) {

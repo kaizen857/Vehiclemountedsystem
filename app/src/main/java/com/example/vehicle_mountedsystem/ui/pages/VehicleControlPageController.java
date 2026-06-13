@@ -62,18 +62,18 @@ public final class VehicleControlPageController {
         boolean seatHeatEnabled = preferences.getBoolean(KEY_SEAT_HEAT_ENABLED, false);
         boolean locked = preferences.getBoolean(KEY_LOCKED, false);
 
-        windowFrontLeftState.setText(windowOpen ? "本地演示：左前窗已打开" : "本地演示：左前窗已关闭");
-        mirrorLeftState.setText(mirrorFolded ? "本地演示：左后视镜已折叠" : "本地演示：左后视镜已展开");
-        seatHeatState.setText(seatHeatEnabled ? "本地演示：座椅加热已开启" : "本地演示：座椅加热已关闭");
-        lockState.setText(locked ? "本地演示：车门已上锁" : "本地演示：车门已解锁");
+        windowFrontLeftState.setText(windowOpen ? "左前窗：已开启" : "左前窗：已关闭");
+        mirrorLeftState.setText(mirrorFolded ? "左后视镜：已折叠" : "左后视镜：已展开");
+        seatHeatState.setText(seatHeatEnabled ? "座椅加热：已开启" : "座椅加热：已关闭");
+        lockState.setText(locked ? "车门：已锁定" : "车门：已解锁");
         demoSummary.setText(summary(windowOpen, mirrorFolded, seatHeatEnabled, locked));
     }
 
     private static String summary(boolean windowOpen, boolean mirrorFolded, boolean seatHeatEnabled, boolean locked) {
-        return "演示状态：车窗" + (windowOpen ? "打开" : "关闭")
+        return "当前状态：车窗" + (windowOpen ? "开启" : "关闭")
                 + " · 后视镜" + (mirrorFolded ? "折叠" : "展开")
                 + " · 座椅加热" + (seatHeatEnabled ? "开启" : "关闭")
-                + " · 车门" + (locked ? "上锁" : "解锁");
+                + " · 车门" + (locked ? "锁定" : "解锁");
     }
 
     private static void click(View root, int id, Action action) {

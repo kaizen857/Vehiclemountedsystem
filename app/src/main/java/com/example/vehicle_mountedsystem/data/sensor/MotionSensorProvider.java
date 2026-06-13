@@ -42,6 +42,7 @@ public final class MotionSensorProvider {
     private final MotionSensorSource sensorSource;
     private final Map<Integer, SensorReading> readings = new HashMap<>();
     private ReadingListener readingListener;
+    private SourceListener highFrequencyListener;
 
     public MotionSensorProvider(Context context) {
         this(new AndroidMotionSensorSource(context));
@@ -78,8 +79,16 @@ public final class MotionSensorProvider {
         this.readingListener = readingListener;
     }
 
+    public synchronized void setHighFrequencyListener(SourceListener listener) {
+        this.highFrequencyListener = listener;
+    }
+
     public synchronized void onSample(SensorSample sample) {
         Objects.requireNonNull(sample, "sample");
+        SourceListener hfListener = highFrequencyListener;
+        if (hfListener != null) {
+            hfListener.onSensorSample(sample);
+        }
         if (!isSupportedSensor(sample.getSensorType())) {
             return;
         }
@@ -120,7 +129,7 @@ public final class MotionSensorProvider {
                 sample.getY(),
                 sample.getZ(),
                 unitFor(sample.getSensorType()),
-                AvailabilityStatus.available("实时传感器数据", sample.getTimestampMillis()));
+                AvailabilityStatus.available("数据流正常", sample.getTimestampMillis()));
     }
 
     private void resetUnavailableReadings() {
@@ -136,7 +145,7 @@ public final class MotionSensorProvider {
                 0.0d,
                 0.0d,
                 unitFor(sensorType),
-                AvailabilityStatus.unavailable(nameFor(sensorType) + "不可用", 0L));
+                AvailabilityStatus.unavailable(nameFor(sensorType) + "未就绪", 0L));
     }
 
     private static SensorReading waitingReading(int sensorType) {
@@ -146,7 +155,7 @@ public final class MotionSensorProvider {
                 0.0d,
                 0.0d,
                 unitFor(sensorType),
-                AvailabilityStatus.available("等待" + nameFor(sensorType) + "数据", 0L));
+                AvailabilityStatus.available("等待" + nameFor(sensorType) + "同步", 0L));
     }
 
     private static boolean isSupportedSensor(int sensorType) {

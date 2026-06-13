@@ -3,10 +3,15 @@ package com.example.vehicle_mountedsystem.ui.pages;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
+import android.os.Build;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vehicle_mountedsystem.R;
@@ -22,6 +27,8 @@ public final class MediaPageController {
     private TextView artistValue;
     private TextView playbackValue;
     private TextView connectionModeValue;
+    private ImageView albumArtBackground;
+    private Bitmap currentAlbumArt;
 
     public MediaPageController(SystemMediaController mediaController) {
         this.mediaController = mediaController;
@@ -47,6 +54,7 @@ public final class MediaPageController {
         artistValue = view.findViewById(R.id.mediaArtistValue);
         playbackValue = view.findViewById(R.id.mediaPlaybackValue);
         connectionModeValue = view.findViewById(R.id.mediaConnectionModeValue);
+        albumArtBackground = view.findViewById(R.id.mediaAlbumArtBackground);
     }
 
     private void bindActions(View view) {
@@ -66,18 +74,36 @@ public final class MediaPageController {
         statusMessage.setText(snapshot.getMessage());
         titleValue.setText(mediaState.getTitle());
         artistValue.setText(mediaState.getArtist());
-        playbackValue.setText(mediaState.isPlaying() ? "正在播放" : "已暂停/未播放");
+        playbackValue.setText(mediaState.isPlaying() ? "正在播放" : "已暂停");
         connectionModeValue.setText(labelFor(snapshot.getConnectionMode()));
+
+        Bitmap newArt = mediaState.getAlbumArt();
+        if (newArt != currentAlbumArt) {
+            currentAlbumArt = newArt;
+            if (newArt != null) {
+                albumArtBackground.setImageBitmap(newArt);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    albumArtBackground.setRenderEffect(RenderEffect.createBlurEffect(100f, 100f, Shader.TileMode.CLAMP));
+                }
+                albumArtBackground.setVisibility(View.VISIBLE);
+            } else {
+                albumArtBackground.setVisibility(View.GONE);
+                albumArtBackground.setImageBitmap(null);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    albumArtBackground.setRenderEffect(null);
+                }
+            }
+        }
     }
 
     private static String labelFor(SystemMediaController.ConnectionMode connectionMode) {
         if (connectionMode == SystemMediaController.ConnectionMode.ACTIVE_SESSION) {
-            return "已连接媒体会话";
+            return "已连接多媒体源";
         }
         if (connectionMode == SystemMediaController.ConnectionMode.MEDIA_KEY_FALLBACK) {
-            return "媒体键降级模式";
+            return "蓝牙媒体控制";
         }
-        return "无活动媒体会话";
+        return "未连接媒体源";
     }
 
     private static void openNotificationSettings(Context context) {

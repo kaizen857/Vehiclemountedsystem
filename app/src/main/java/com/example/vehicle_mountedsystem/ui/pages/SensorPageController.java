@@ -131,7 +131,7 @@ public final class SensorPageController {
                 AttitudeIndicatorView attitudeView = view.findViewById(R.id.sensorAttitudeIndicator);
                 if (attitudeView != null) {
                     attitudeView.flipPitch();
-                    flipPitchBtn.setText(attitudeView.isPitchFlipped() ? "俯仰已翻转" : "翻转俯仰");
+                    flipPitchBtn.setText(attitudeView.isPitchFlipped() ? "俯仰反向" : "俯仰正常");
                 }
             });
         }
@@ -142,7 +142,7 @@ public final class SensorPageController {
                 AttitudeIndicatorView attitudeView = view.findViewById(R.id.sensorAttitudeIndicator);
                 if (attitudeView != null) {
                     attitudeView.flipRoll();
-                    flipRollBtn.setText(attitudeView.isRollFlipped() ? "横滚已翻转" : "翻转横滚");
+                    flipRollBtn.setText(attitudeView.isRollFlipped() ? "横滚反向" : "横滚正常");
                 }
             });
         }
@@ -208,9 +208,9 @@ public final class SensorPageController {
                 Math.max(timestamp(sensorProvider.getGameRotationVectorReading()),
                          timestamp(sensorProvider.getRotationVectorReading())));
         if (latestTimestamp == 0L) {
-            return "等待传感器数据更新";
+            return "等待数据同步";
         }
-        return String.format(Locale.US, "最近更新：%d ms", latestTimestamp);
+        return String.format(Locale.US, "数据延迟：%d ms", latestTimestamp);
     }
 
     private static long timestamp(SensorReading reading) {
@@ -234,7 +234,7 @@ public final class SensorPageController {
     }
 
     private static SensorReading unavailable(String name, String unit) {
-        return new SensorReading(name, 0.0d, 0.0d, 0.0d, unit, AvailabilityStatus.unavailable(name + "不可用", 0L));
+        return new SensorReading(name, 0.0d, 0.0d, 0.0d, unit, AvailabilityStatus.unavailable(name + "未就绪", 0L));
     }
 
     private static void text(View view, int id, String value) {

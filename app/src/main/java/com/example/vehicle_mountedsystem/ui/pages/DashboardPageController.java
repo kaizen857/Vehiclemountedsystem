@@ -92,7 +92,7 @@ public final class DashboardPageController {
     }
 
     private static String hvacSummary(HvacState hvacState) {
-        String acText = hvacState.isAcEnabled() ? "AC 开启" : "AC 关闭";
+        String acText = hvacState.isAcEnabled() ? "AC 已开启" : "AC 已关闭";
         String circulationText = hvacState.isInnerCirculationEnabled() ? "内循环" : "外循环";
         return hvacState.getTemperatureCelsius() + "°C · 风量 "
                 + hvacState.getFanLevel() + " · "

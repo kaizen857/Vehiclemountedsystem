@@ -3,7 +3,8 @@
     android:id="@+id/pageSettingsRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:padding="@dimen/page_card_padding">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,29 +15,30 @@
             android:id="@+id/settingsPageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/page_section_gap"
             android:text="@string/page_settings_badge"
             android:textColor="@color/accent_blue"
             android:textSize="@dimen/page_title_text_size"
             android:textStyle="bold" />
 
+        <!-- Notification & Sensor Group -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_section_gap"
-            android:orientation="horizontal">
+            android:layout_marginBottom="@dimen/page_card_gap"
+            android:background="@drawable/bg_card_rounded"
+            android:orientation="vertical"
+            android:padding="@dimen/page_card_padding">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/page_card_gap"
-                android:layout_weight="1"
-                android:background="@color/card_panel_bg"
-                android:orientation="vertical"
-                android:padding="@dimen/page_card_padding">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/settings_notification_label"
                     android:textColor="@color/text_secondary"
                     android:textSize="@dimen/page_label_text_size" />
@@ -45,22 +47,27 @@
                     android:id="@+id/settingNotificationStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_status_text_size" />
+                    android:textSize="@dimen/page_status_text_size"
+                    android:textStyle="bold" />
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/page_micro_gap"
+                android:layout_marginBottom="@dimen/page_micro_gap"
+                android:background="@color/border_color" />
+
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/card_panel_bg"
-                android:orientation="vertical"
-                android:padding="@dimen/page_card_padding">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/settings_sensor_label"
                     android:textColor="@color/text_secondary"
                     android:textSize="@dimen/page_label_text_size" />
@@ -69,30 +76,30 @@
                     android:id="@+id/settingSensorStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_status_text_size" />
+                    android:textSize="@dimen/page_status_text_size"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
+        <!-- IR & Media Group -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_card_gap"
-            android:orientation="horizontal">
+            android:layout_marginBottom="@dimen/page_card_gap"
+            android:background="@drawable/bg_card_rounded"
+            android:orientation="vertical"
+            android:padding="@dimen/page_card_padding">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/page_card_gap"
-                android:layout_weight="1"
-                android:background="@color/card_panel_alt_bg"
-                android:orientation="vertical"
-                android:padding="@dimen/page_card_padding">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/settings_ir_label"
                     android:textColor="@color/text_secondary"
                     android:textSize="@dimen/page_label_text_size" />
@@ -101,22 +108,27 @@
                     android:id="@+id/settingIrStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
                     android:textColor="@color/accent_amber"
-                    android:textSize="@dimen/page_status_text_size" />
+                    android:textSize="@dimen/page_status_text_size"
+                    android:textStyle="bold" />
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/page_micro_gap"
+                android:layout_marginBottom="@dimen/page_micro_gap"
+                android:background="@color/border_color" />
+
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/card_panel_alt_bg"
-                android:orientation="vertical"
-                android:padding="@dimen/page_card_padding">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:text="@string/settings_media_label"
                     android:textColor="@color/text_secondary"
                     android:textSize="@dimen/page_label_text_size" />
@@ -125,23 +137,24 @@
                     android:id="@+id/settingMediaStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
                     android:textColor="@color/accent_cyan"
-                    android:textSize="@dimen/page_status_text_size" />
+                    android:textSize="@dimen/page_status_text_size"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Data Source Group -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_card_gap"
-            android:background="@color/card_panel_bg"
-            android:orientation="vertical"
+            android:background="@drawable/bg_card_rounded"
+            android:orientation="horizontal"
             android:padding="@dimen/page_card_padding">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/settings_data_source_label"
                 android:textColor="@color/text_secondary"
                 android:textSize="@dimen/page_label_text_size" />
@@ -150,9 +163,9 @@
                 android:id="@+id/settingDataSource"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/page_micro_gap"
                 android:textColor="@color/text_primary"
-                android:textSize="@dimen/page_status_text_size" />
+                android:textSize="@dimen/page_status_text_size"
+                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

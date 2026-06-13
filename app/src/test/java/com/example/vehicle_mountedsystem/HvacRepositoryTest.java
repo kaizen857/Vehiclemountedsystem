@@ -90,7 +90,7 @@ public class HvacRepositoryTest {
         assertEquals(16, state.getTemperatureCelsius());
         assertEquals(5, state.getFanLevel());
         assertEquals("DEFOG", state.getMode());
-        assertEquals("除雾", state.getModeLabel());
+        assertEquals("除霜", state.getModeLabel());
         assertTrue(state.isAcEnabled());
         assertTrue(state.isInnerCirculationEnabled());
     }

@@ -3,6 +3,7 @@
     android:id="@+id/pageNavigationRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/shell_content_padding"
     android:orientation="vertical">
 
     <TextView
@@ -11,28 +12,36 @@
         android:layout_height="wrap_content"
         android:text="@string/page_navigation_badge"
         android:textColor="@color/accent_blue"
-        android:textSize="@dimen/page_title_text_size"
+        android:textSize="@dimen/shell_title_text_size"
         android:textStyle="bold" />
 
+    <!-- Enhanced Route Lane Preview Card -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/page_nav_panel_height"
-        android:layout_marginTop="@dimen/page_section_gap"
-        android:background="@color/card_panel_alt_bg"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/shell_content_gap"
+        android:background="@drawable/bg_card_rounded"
         android:orientation="vertical"
-        android:padding="@dimen/page_card_padding">
+        android:padding="@dimen/shell_card_padding">
 
-        <View
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/page_route_lane_height"
-            android:background="@color/accent_cyan" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/page_route_lane_height"
-            android:layout_marginTop="@dimen/page_card_gap"
-            android:background="@color/accent_blue" />
+            android:layout_height="@dimen/page_nav_panel_height"
+            android:background="@color/bg_dark">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="16dp"
+                android:background="@color/accent_cyan" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="16dp"
+                android:alpha="0.4"
+                android:background="@color/accent_blue" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/navigationRouteCardPrimary"
@@ -41,13 +50,23 @@
             android:layout_marginTop="@dimen/page_card_gap"
             android:text="@string/navigation_route_primary"
             android:textColor="@color/text_primary"
+            android:textSize="@dimen/page_status_text_size"
+            android:textStyle="bold" />
+            
+        <TextView
+            android:id="@+id/navigationRouteCardSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/page_micro_gap"
+            android:text="@string/navigation_demo_notice"
+            android:textColor="@color/text_secondary"
             android:textSize="@dimen/page_status_text_size" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/page_card_gap"
+        android:layout_marginTop="@dimen/shell_content_gap"
         android:orientation="horizontal">
 
         <TextView
@@ -56,8 +75,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/page_card_gap"
             android:layout_weight="1"
-            android:background="@color/card_panel_bg"
-            android:padding="@dimen/page_card_padding"
+            android:background="@drawable/bg_card_rounded"
+            android:padding="@dimen/shell_card_padding"
             android:textColor="@color/text_primary"
             android:textSize="@dimen/page_value_text_size" />
 
@@ -67,8 +86,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/page_card_gap"
             android:layout_weight="1"
-            android:background="@color/card_panel_bg"
-            android:padding="@dimen/page_card_padding"
+            android:background="@drawable/bg_card_rounded"
+            android:padding="@dimen/shell_card_padding"
             android:textColor="@color/text_primary"
             android:textSize="@dimen/page_value_text_size" />
 
@@ -77,40 +96,37 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/card_panel_bg"
-            android:padding="@dimen/page_card_padding"
+            android:background="@drawable/bg_card_rounded"
+            android:padding="@dimen/shell_card_padding"
             android:textColor="@color/text_primary"
             android:textSize="@dimen/page_value_text_size" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/navigationEtaValue"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/page_card_gap"
-        android:background="@color/card_panel_bg"
-        android:padding="@dimen/page_card_padding"
-        android:textColor="@color/text_primary"
-        android:textSize="@dimen/page_status_text_size" />
+        android:orientation="horizontal">
+        
+        <TextView
+            android:id="@+id/navigationEtaValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/page_card_gap"
+            android:background="@drawable/bg_card_rounded"
+            android:padding="@dimen/shell_card_padding"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/page_status_text_size" />
 
-    <TextView
-        android:id="@+id/navigationImuStatus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/page_card_gap"
-        android:background="@color/card_panel_bg"
-        android:padding="@dimen/page_card_padding"
-        android:textColor="@color/accent_amber"
-        android:textSize="@dimen/page_status_text_size" />
-
-    <TextView
-        android:id="@+id/navigationRouteCardSecondary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/page_card_gap"
-        android:background="@color/card_panel_alt_bg"
-        android:padding="@dimen/page_card_padding"
-        android:text="@string/navigation_demo_notice"
-        android:textColor="@color/text_secondary"
-        android:textSize="@dimen/page_status_text_size" />
+        <TextView
+            android:id="@+id/navigationImuStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_card_rounded"
+            android:padding="@dimen/shell_card_padding"
+            android:textColor="@color/accent_amber"
+            android:textSize="@dimen/page_status_text_size" />
+    </LinearLayout>
 </LinearLayout>

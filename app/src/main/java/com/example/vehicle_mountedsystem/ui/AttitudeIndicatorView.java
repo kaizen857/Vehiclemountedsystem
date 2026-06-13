@@ -31,7 +31,7 @@ public final class AttitudeIndicatorView extends View {
     private int pitchSign = 1;
     private int rollSign = 1;
     private long lastGyroTimestampMillis = -1L;
-    private String dataSourceLabel = "等待数据";
+    private String dataSourceLabel = "同步中...";
 
     private final Paint skyPaint;
     private final Paint groundPaint;
@@ -126,7 +126,7 @@ public final class AttitudeIndicatorView extends View {
         filteredPitchDegrees = 0.98f * filteredPitchDegrees + 0.02f * gyroPitchDegrees;
         filteredRollDegrees = 0.98f * filteredRollDegrees + 0.02f * gyroRollDegrees;
 
-        dataSourceLabel = "陀螺仪";
+        dataSourceLabel = "传感器";
         lastGyroTimestampMillis = timestampMillis;
         postInvalidate();
     }
@@ -150,7 +150,7 @@ public final class AttitudeIndicatorView extends View {
         filteredPitchDegrees = (float) Math.toDegrees(orientation[1]);
         filteredRollDegrees = (float) Math.toDegrees(orientation[2]);
 
-        dataSourceLabel = "融合姿态";
+        dataSourceLabel = "姿态融合";
         postInvalidate();
     }
 
@@ -179,14 +179,14 @@ public final class AttitudeIndicatorView extends View {
         pitchOffset = 0f;
         rollOffset = 0f;
         lastGyroTimestampMillis = -1L;
-        dataSourceLabel = "已重置";
+        dataSourceLabel = "已重设";
         postInvalidate();
     }
 
     public void zeroCurrentAttitude() {
         pitchOffset = filteredPitchDegrees;
         rollOffset = filteredRollDegrees;
-        dataSourceLabel = "姿态已校准";
+        dataSourceLabel = "已校准";
         postInvalidate();
     }
 

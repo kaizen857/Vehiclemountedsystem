@@ -65,9 +65,9 @@ public class MotionSensorProviderTest {
         provider.start();
 
         assertTrue(provider.getAccelerometerReading().getAvailabilityStatus().isAvailable());
-        assertEquals("等待加速度计数据", provider.getAccelerometerReading().getAvailabilityStatus().getMessage());
+        assertEquals("等待加速度计同步", provider.getAccelerometerReading().getAvailabilityStatus().getMessage());
         assertFalse(provider.getLinearAccelerationReading().getAvailabilityStatus().isAvailable());
-        assertEquals("线性加速度不可用", provider.getLinearAccelerationReading().getAvailabilityStatus().getMessage());
+        assertEquals("线性加速度未就绪", provider.getLinearAccelerationReading().getAvailabilityStatus().getMessage());
         provider.stop();
         assertFalse(source.started);
     }

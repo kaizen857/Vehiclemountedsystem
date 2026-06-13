@@ -84,19 +84,17 @@ public class TabController {
     private void updateTabVisuals() {
         int selectedColor = root.getContext().getColor(R.color.accent_cyan);
         int unselectedColor = root.getContext().getColor(R.color.text_secondary);
-        int selectedBg = root.getContext().getColor(R.color.tab_selected_bg);
-        int unselectedBg = root.getContext().getColor(R.color.tab_unselected_bg);
 
         for (Map.Entry<Tab, TextView> entry : tabViews.entrySet()) {
             Tab tab = entry.getKey();
             TextView view = entry.getValue();
             if (tab == currentTab) {
                 view.setTextColor(selectedColor);
-                view.setBackgroundColor(selectedBg);
+                view.setBackgroundResource(R.drawable.bg_tab_selected);
                 view.setSelected(true);
             } else {
                 view.setTextColor(unselectedColor);
-                view.setBackgroundColor(unselectedBg);
+                view.setBackgroundResource(0);
                 view.setSelected(false);
             }
         }

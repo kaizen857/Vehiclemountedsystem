@@ -3,7 +3,8 @@
     android:id="@+id/pageControlRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:padding="@dimen/page_card_padding">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,45 +15,50 @@
             android:id="@+id/controlPageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/page_section_gap"
             android:text="@string/page_control_badge"
             android:textColor="@color/accent_blue"
             android:textSize="@dimen/page_title_text_size"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/controlDemoNotice"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_micro_gap"
-            android:background="@color/card_panel_alt_bg"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card_rounded"
             android:padding="@dimen/page_card_padding"
-            android:text="@string/control_demo_notice"
-            android:textColor="@color/accent_amber"
-            android:textSize="@dimen/page_status_text_size" />
+            android:layout_marginBottom="@dimen/page_section_gap">
 
-        <TextView
-            android:id="@+id/controlDemoSummary"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_micro_gap"
-            android:background="@color/card_panel_bg"
-            android:padding="@dimen/page_card_padding"
-            android:textColor="@color/accent_cyan"
-            android:textSize="@dimen/page_status_text_size"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/controlDemoNotice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/control_demo_notice"
+                android:textColor="@color/accent_amber"
+                android:textSize="@dimen/page_status_text_size" />
+
+            <TextView
+                android:id="@+id/controlDemoSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/page_micro_gap"
+                android:textColor="@color/accent_cyan"
+                android:textSize="@dimen/page_status_text_size"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_section_gap"
+            android:layout_marginBottom="@dimen/page_card_gap"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/page_card_gap"
                 android:layout_weight="1"
-                android:background="@color/card_panel_bg"
+                android:background="@drawable/bg_card_rounded"
                 android:orientation="vertical"
                 android:padding="@dimen/page_card_padding">
 
@@ -72,16 +78,21 @@
                     android:textSize="@dimen/page_value_text_size"
                     android:textStyle="bold" />
 
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/windowFrontLeftAction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
-                    android:background="@color/card_panel_alt_bg"
+                    android:layout_marginTop="@dimen/page_section_gap"
+                    android:background="@drawable/bg_card_rounded"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:padding="@dimen/page_card_padding"
+                    android:padding="16dp"
                     android:text="@string/control_window_action"
                     android:textColor="@color/accent_cyan"
                     android:textSize="@dimen/page_status_text_size"
@@ -90,9 +101,9 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/card_panel_bg"
+                android:background="@drawable/bg_card_rounded"
                 android:orientation="vertical"
                 android:padding="@dimen/page_card_padding">
 
@@ -112,16 +123,21 @@
                     android:textSize="@dimen/page_value_text_size"
                     android:textStyle="bold" />
 
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/mirrorLeftAction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
-                    android:background="@color/card_panel_alt_bg"
+                    android:layout_marginTop="@dimen/page_section_gap"
+                    android:background="@drawable/bg_card_rounded"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:padding="@dimen/page_card_padding"
+                    android:padding="16dp"
                     android:text="@string/control_mirror_action"
                     android:textColor="@color/accent_cyan"
                     android:textSize="@dimen/page_status_text_size"
@@ -132,15 +148,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_card_gap"
+            android:layout_marginBottom="@dimen/page_section_gap"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/page_card_gap"
                 android:layout_weight="1"
-                android:background="@color/card_panel_bg"
+                android:background="@drawable/bg_card_rounded"
                 android:orientation="vertical"
                 android:padding="@dimen/page_card_padding">
 
@@ -160,16 +176,21 @@
                     android:textSize="@dimen/page_value_text_size"
                     android:textStyle="bold" />
 
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/seatHeatAction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
-                    android:background="@color/card_panel_alt_bg"
+                    android:layout_marginTop="@dimen/page_section_gap"
+                    android:background="@drawable/bg_card_rounded"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:padding="@dimen/page_card_padding"
+                    android:padding="16dp"
                     android:text="@string/control_seat_heat_action"
                     android:textColor="@color/accent_cyan"
                     android:textSize="@dimen/page_status_text_size"
@@ -178,9 +199,9 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/card_panel_bg"
+                android:background="@drawable/bg_card_rounded"
                 android:orientation="vertical"
                 android:padding="@dimen/page_card_padding">
 
@@ -200,16 +221,21 @@
                     android:textSize="@dimen/page_value_text_size"
                     android:textStyle="bold" />
 
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/lockDemoAction"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
-                    android:background="@color/card_panel_alt_bg"
+                    android:layout_marginTop="@dimen/page_section_gap"
+                    android:background="@drawable/bg_card_rounded"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:padding="@dimen/page_card_padding"
+                    android:padding="16dp"
                     android:text="@string/control_lock_action"
                     android:textColor="@color/accent_cyan"
                     android:textSize="@dimen/page_status_text_size"

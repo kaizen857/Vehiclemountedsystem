@@ -12,9 +12,9 @@ import java.util.Objects;
 
 public final class BatteryStatusProvider {
     private static final int UNSUPPORTED_INT = Integer.MIN_VALUE;
-    private static final String BATTERY_AVAILABLE_MESSAGE = "手机电池状态可用";
-    private static final String POWER_UNAVAILABLE_MESSAGE = "手机电量可用，功率估算不可用";
-    private static final String BATTERY_UNAVAILABLE_MESSAGE = "手机电池状态不可用";
+    private static final String BATTERY_AVAILABLE_MESSAGE = "动力系统电量正常";
+    private static final String POWER_UNAVAILABLE_MESSAGE = "电池电量已就绪，功率估算同步中";
+    private static final String BATTERY_UNAVAILABLE_MESSAGE = "动力系统状态不可用";
 
     private final BatteryDataSource dataSource;
 

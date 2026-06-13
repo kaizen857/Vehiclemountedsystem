@@ -112,9 +112,9 @@ public class VehicleModelTest {
         assertEquals("未知艺术家", state.getArtist());
         assertFalse(state.isPlaying());
         assertFalse(state.getAvailabilityStatus().isAvailable());
-        assertThrowsIllegalArgument(() -> new MediaState("", "artist", false, AvailabilityStatus.available()));
-        assertThrowsIllegalArgument(() -> new MediaState("title", " ", false, AvailabilityStatus.available()));
-        assertThrowsNullPointer(() -> new MediaState("title", "artist", false, null));
+        assertThrowsIllegalArgument(() -> new MediaState("", "artist", false, null, AvailabilityStatus.available()));
+        assertThrowsIllegalArgument(() -> new MediaState("title", " ", false, null, AvailabilityStatus.available()));
+        assertThrowsNullPointer(() -> new MediaState("title", "artist", false, null, null));
     }
 
     @Test

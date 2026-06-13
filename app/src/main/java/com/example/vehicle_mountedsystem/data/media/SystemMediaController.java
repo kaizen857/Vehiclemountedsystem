@@ -2,6 +2,7 @@ package com.example.vehicle_mountedsystem.data.media;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
@@ -40,7 +41,7 @@ public final class SystemMediaController {
             return new MediaSnapshot(
                     MediaState.defaultState(),
                     ConnectionMode.MEDIA_KEY_FALLBACK,
-                    "未授权通知使用权，无法读取媒体会话；控制按钮将降级发送系统媒体键。");
+                    "未获取通知访问权限，将使用基础媒体控制。");
         }
 
         SessionSnapshot session = sessionGateway.getActiveSession();
@@ -48,13 +49,13 @@ public final class SystemMediaController {
             return new MediaSnapshot(
                     MediaState.defaultState(),
                     ConnectionMode.NO_ACTIVE_SESSION,
-                    "未发现活动媒体会话，请先打开音乐应用；控制按钮将降级发送系统媒体键。");
+                    "未检测到活动媒体，请在设备上打开音乐应用。");
         }
 
         return new MediaSnapshot(
                 toMediaState(session),
                 ConnectionMode.ACTIVE_SESSION,
-                "已连接系统媒体会话，可读取曲目信息并使用传输控制。");
+                "多媒体系统已连接，正在同步播放信息。");
     }
 
     public void setSnapshotListener(SnapshotListener snapshotListener) {
@@ -70,7 +71,7 @@ public final class SystemMediaController {
             snapshotListener.onSnapshotChanged(new MediaSnapshot(
                     toMediaState(session),
                     ConnectionMode.ACTIVE_SESSION,
-                    "已连接系统媒体会话，可读取曲目信息并使用传输控制。"));
+                    "多媒体系统已连接，正在同步播放信息。"));
         });
     }
 
@@ -97,7 +98,8 @@ public final class SystemMediaController {
                 textOrDefault(session.getTitle(), UNKNOWN_TITLE),
                 textOrDefault(session.getArtist(), UNKNOWN_ARTIST),
                 session.isPlaying(),
-                AvailabilityStatus.available("已连接系统媒体会话", TIMESTAMP_MILLIS));
+                session.getAlbumArt(),
+                AvailabilityStatus.available("多媒体源已就绪", TIMESTAMP_MILLIS));
     }
 
     public static boolean hasPackageNotificationAccess(String enabledListeners, String packageName) {
@@ -153,11 +155,13 @@ public final class SystemMediaController {
         private final String title;
         private final String artist;
         private final boolean playing;
+        private final Bitmap albumArt;
 
-        public SessionSnapshot(String title, String artist, boolean playing) {
+        public SessionSnapshot(String title, String artist, boolean playing, Bitmap albumArt) {
             this.title = title;
             this.artist = artist;
             this.playing = playing;
+            this.albumArt = albumArt;
         }
 
         public String getTitle() {
@@ -170,6 +174,10 @@ public final class SystemMediaController {
 
         public boolean isPlaying() {
             return playing;
+        }
+
+        public Bitmap getAlbumArt() {
+            return albumArt;
         }
     }
 
@@ -329,7 +337,14 @@ public final class SystemMediaController {
             String title = metadata == null ? UNKNOWN_TITLE : metadata.getString(MediaMetadata.METADATA_KEY_TITLE);
             String artist = metadata == null ? UNKNOWN_ARTIST : metadata.getString(MediaMetadata.METADATA_KEY_ARTIST);
             boolean playing = playbackState != null && playbackState.getState() == PlaybackState.STATE_PLAYING;
-            return new SessionSnapshot(title, artist, playing);
+            Bitmap albumArt = null;
+            if (metadata != null) {
+                albumArt = metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
+                if (albumArt == null) {
+                    albumArt = metadata.getBitmap(MediaMetadata.METADATA_KEY_ART);
+                }
+            }
+            return new SessionSnapshot(title, artist, playing, albumArt);
         }
 
         private static MediaController selectController(List<MediaController> controllers) {

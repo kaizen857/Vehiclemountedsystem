@@ -14,7 +14,7 @@ public final class HvacRepository {
     public static final HvacMode MODE_AUTO = new HvacMode("AUTO", "自动");
     public static final HvacMode MODE_COOL = new HvacMode("COOL", "制冷");
     public static final HvacMode MODE_HEAT = new HvacMode("HEAT", "制热");
-    public static final HvacMode MODE_DEFOG = new HvacMode("DEFOG", "除雾");
+    public static final HvacMode MODE_DEFOG = new HvacMode("DEFOG", "除霜");
     public static final HvacMode MODE_FAN = new HvacMode("FAN", "送风");
 
     private static final String PREFERENCES_NAME = "hvac_state";

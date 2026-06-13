@@ -7,17 +7,22 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:background="@color/bg_dark"
+    android:padding="24dp"
     tools:context=".MainActivity">
 
-    <!-- Left Tab Rail -->
+    <!-- Left Tab Rail (Sleek Modern Car Dock) -->
     <LinearLayout
         android:id="@+id/tabRail"
         android:layout_width="@dimen/shell_tab_rail_width"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/bg_rail"
+        android:background="@drawable/bg_card_rounded"
         android:paddingTop="@dimen/shell_tab_rail_vertical_padding"
-        android:paddingBottom="@dimen/shell_tab_rail_vertical_padding">
+        android:paddingBottom="@dimen/shell_tab_rail_vertical_padding"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:gravity="center_horizontal"
+        android:elevation="12dp">
 
         <TextView
             android:id="@+id/tabOverview"
@@ -31,7 +36,7 @@
             android:textStyle="bold"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground" />
+            android:layout_marginBottom="@dimen/shell_tab_spacing" />
 
         <TextView
             android:id="@+id/tabMinimal"
@@ -45,7 +50,7 @@
             android:textStyle="bold"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground" />
+            android:layout_marginBottom="@dimen/shell_tab_spacing" />
 
         <TextView
             android:id="@+id/tabNavigation"
@@ -59,7 +64,7 @@
             android:textStyle="bold"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground" />
+            android:layout_marginBottom="@dimen/shell_tab_spacing" />
 
         <TextView
             android:id="@+id/tabSensors"
@@ -73,7 +78,7 @@
             android:textStyle="bold"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground" />
+            android:layout_marginBottom="@dimen/shell_tab_spacing" />
 
         <TextView
             android:id="@+id/tabHvac"
@@ -87,7 +92,7 @@
             android:textStyle="bold"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground" />
+            android:layout_marginBottom="@dimen/shell_tab_spacing" />
 
         <TextView
             android:id="@+id/tabMedia"
@@ -101,7 +106,7 @@
             android:textStyle="bold"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground" />
+            android:layout_marginBottom="@dimen/shell_tab_spacing" />
 
         <TextView
             android:id="@+id/tabControls"
@@ -115,7 +120,7 @@
             android:textStyle="bold"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground" />
+            android:layout_marginBottom="@dimen/shell_tab_spacing" />
 
         <TextView
             android:id="@+id/tabSettings"
@@ -128,16 +133,9 @@
             android:textSize="@dimen/shell_tab_text_size"
             android:textStyle="bold"
             android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground" />
+            android:focusable="true" />
 
     </LinearLayout>
-
-    <!-- Divider -->
-    <View
-        android:layout_width="@dimen/shell_divider_width"
-        android:layout_height="match_parent"
-        android:background="@color/border_color" />
 
     <!-- Right Content Area -->
     <LinearLayout
@@ -145,7 +143,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="@dimen/shell_content_padding">
+        android:layout_marginStart="@dimen/shell_content_gap">
 
         <!-- Header -->
         <TextView
@@ -156,17 +154,18 @@
             android:textColor="@color/text_primary"
             android:textSize="@dimen/shell_title_text_size"
             android:textStyle="bold"
-            android:letterSpacing="0.05" />
+            android:letterSpacing="0.05"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="8dp" />
 
         <!-- Content Host -->
         <FrameLayout
             android:id="@+id/pageHost"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="@dimen/shell_content_gap"
-            android:background="@color/card_bg"
-            android:padding="@dimen/shell_card_padding">
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_card_rounded"
+            android:padding="@dimen/shell_card_padding"
+            android:elevation="12dp">
 
             <!-- Placeholder for default overview page content -->
             <TextView

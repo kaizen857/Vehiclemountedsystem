@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="shell_tab_rail_width">110dp</dimen>
-    <dimen name="shell_tab_rail_vertical_padding">16dp</dimen>
-    <dimen name="shell_tab_text_size">16sp</dimen>
+    <!-- Shell Layout -->
+    <dimen name="shell_tab_rail_width">130dp</dimen> <!-- Slightly wider for modern look -->
+    <dimen name="shell_tab_rail_vertical_padding">32dp</dimen>
+    <dimen name="shell_tab_text_size">15sp</dimen>
+    <dimen name="shell_tab_spacing">16dp</dimen>
+    <dimen name="shell_tab_radius">12dp</dimen>
+    
     <dimen name="shell_divider_width">1dp</dimen>
-    <dimen name="shell_content_padding">24dp</dimen>
-    <dimen name="shell_content_gap">16dp</dimen>
-    <dimen name="shell_card_padding">16dp</dimen>
-    <dimen name="shell_title_text_size">24sp</dimen>
+    
+    <!-- Content Area -->
+    <dimen name="shell_content_padding">32dp</dimen>
+    <dimen name="shell_content_gap">24dp</dimen>
+    <dimen name="shell_card_padding">24dp</dimen>
+    <dimen name="shell_card_radius">24dp</dimen>
+    
+    <!-- Typography -->
+    <dimen name="shell_title_text_size">32sp</dimen> <!-- Larger, bolder titles -->
     <dimen name="shell_placeholder_text_size">18sp</dimen>
+    
+    <!-- Legacy Page Tokens -->
     <dimen name="page_section_gap">12dp</dimen>
-    <dimen name="page_card_gap">12dp</dimen>
-    <dimen name="page_card_padding">12dp</dimen>
-    <dimen name="page_micro_gap">6dp</dimen>
-    <dimen name="page_title_text_size">16sp</dimen>
-    <dimen name="page_label_text_size">12sp</dimen>
-    <dimen name="page_value_text_size">20sp</dimen>
-    <dimen name="page_speed_text_size">56sp</dimen>
-    <dimen name="page_status_text_size">13sp</dimen>
-    <dimen name="page_nav_panel_height">96dp</dimen>
+    <dimen name="page_card_gap">16dp</dimen>
+    <dimen name="page_card_padding">16dp</dimen>
+    <dimen name="page_micro_gap">8dp</dimen>
+    
+    <!-- Page Typography -->
+    <dimen name="page_title_text_size">18sp</dimen>
+    <dimen name="page_label_text_size">14sp</dimen>
+    <dimen name="page_value_text_size">24sp</dimen>
+    <dimen name="page_speed_text_size">64sp</dimen>
+    <dimen name="page_status_text_size">14sp</dimen>
+    
+    <!-- Component Specific -->
+    <dimen name="page_nav_panel_height">120dp</dimen>
     <dimen name="page_route_lane_height">4dp</dimen>
-    <dimen name="hvac_card_padding">8dp</dimen>
-    <dimen name="hvac_temperature_text_size">44sp</dimen>
+    <dimen name="hvac_card_padding">12dp</dimen>
+    <dimen name="hvac_temperature_text_size">48sp</dimen>
 </resources>

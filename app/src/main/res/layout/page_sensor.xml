@@ -3,6 +3,7 @@
     android:id="@+id/pageSensorRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/shell_content_padding"
     android:fillViewport="true">
 
     <LinearLayout
@@ -15,8 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/page_sensor_badge"
-            android:textColor="@color/accent_blue"
-            android:textSize="@dimen/page_title_text_size"
+            android:textColor="@color/accent_cyan"
+            android:textSize="@dimen/shell_title_text_size"
             android:textStyle="bold" />
 
         <TextView
@@ -31,7 +32,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_section_gap"
+            android:layout_marginTop="@dimen/shell_content_gap"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -39,9 +40,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/page_card_gap"
                 android:layout_weight="1"
-                android:background="@color/card_panel_bg"
+                android:background="@drawable/bg_card_rounded"
                 android:orientation="vertical"
-                android:padding="@dimen/page_card_padding">
+                android:padding="@dimen/shell_card_padding">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -56,7 +57,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/page_micro_gap"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_value_text_size" />
+                    android:textSize="@dimen/page_value_text_size"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/sensorAccelerometerStatus"
@@ -71,9 +73,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/card_panel_bg"
+                android:background="@drawable/bg_card_rounded"
                 android:orientation="vertical"
-                android:padding="@dimen/page_card_padding">
+                android:padding="@dimen/shell_card_padding">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -88,7 +90,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/page_micro_gap"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_value_text_size" />
+                    android:textSize="@dimen/page_value_text_size"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/sensorLinearAccelerationStatus"
@@ -105,9 +108,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/page_card_gap"
-            android:background="@color/card_panel_alt_bg"
+            android:background="@drawable/bg_card_rounded"
             android:orientation="vertical"
-            android:padding="@dimen/page_card_padding">
+            android:padding="@dimen/shell_card_padding">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -120,14 +123,15 @@
                 android:id="@+id/sensorAttitudeIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="@dimen/page_micro_gap"
+                android:layout_marginTop="@dimen/page_card_gap"
                 android:layout_weight="1"
                 android:minHeight="220dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/page_micro_gap"
+                android:layout_marginTop="@dimen/page_card_gap"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
@@ -148,28 +152,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:minHeight="0dp"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp"
-                    android:text="翻转俯仰"
-                    android:textSize="@dimen/page_label_text_size" />
+                    android:text="翻转俯仰" />
 
                 <Button
                     android:id="@+id/sensorFlipRoll"
                     style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minHeight="0dp"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp"
-                    android:text="翻转横滚"
-                    android:textSize="@dimen/page_label_text_size" />
+                    android:text="翻转横滚" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <View
@@ -183,11 +180,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:minHeight="0dp"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp"
-                    android:text="校准速度"
-                    android:textSize="@dimen/page_label_text_size" />
+                    android:text="校准速度" />
 
                 <Button
                     android:id="@+id/sensorAttitudeCalibrate"
@@ -195,22 +188,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:minHeight="0dp"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp"
-                    android:text="校准姿态"
-                    android:textSize="@dimen/page_label_text_size" />
+                    android:text="校准姿态" />
 
                 <Button
                     android:id="@+id/sensorImuReset"
                     style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minHeight="0dp"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp"
-                    android:text="重置速度"
-                    android:textSize="@dimen/page_label_text_size" />
+                    android:text="重置速度" />
             </LinearLayout>
         </LinearLayout>
 
@@ -224,9 +209,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/card_panel_bg"
+                android:background="@drawable/bg_card_rounded"
                 android:orientation="vertical"
-                android:padding="@dimen/page_card_padding">
+                android:padding="@dimen/shell_card_padding">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -241,7 +226,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/page_micro_gap"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_value_text_size" />
+                    android:textSize="@dimen/page_value_text_size"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/sensorRotationVectorStatus"

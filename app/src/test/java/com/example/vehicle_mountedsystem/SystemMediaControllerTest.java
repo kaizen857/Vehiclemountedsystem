@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class SystemMediaControllerTest {
     @Test
     public void loadSnapshot_withActiveSessionExposesMetadataAndPlayback() {
-        FakeSessionGateway sessionGateway = new FakeSessionGateway(true, new SessionSnapshot("夜间巡航", "车载电台", true));
+        FakeSessionGateway sessionGateway = new FakeSessionGateway(true, new SessionSnapshot("夜间巡航", "车载电台", true, null));
         FakeMediaKeyGateway mediaKeyGateway = new FakeMediaKeyGateway();
         SystemMediaController controller = new SystemMediaController(sessionGateway, mediaKeyGateway);
 
@@ -30,12 +30,12 @@ public class SystemMediaControllerTest {
         assertEquals("车载电台", snapshot.getMediaState().getArtist());
         assertTrue(snapshot.getMediaState().isPlaying());
         assertTrue(snapshot.getMediaState().getAvailabilityStatus().isAvailable());
-        assertEquals("已连接系统媒体会话，可读取曲目信息并使用传输控制。", snapshot.getMessage());
+        assertEquals("多媒体系统已连接，正在同步播放信息。", snapshot.getMessage());
     }
 
     @Test
     public void dispatch_withActiveSessionUsesSessionControls() {
-        FakeSessionGateway sessionGateway = new FakeSessionGateway(true, new SessionSnapshot("曲目", "艺术家", false));
+        FakeSessionGateway sessionGateway = new FakeSessionGateway(true, new SessionSnapshot("曲目", "艺术家", false, null));
         FakeMediaKeyGateway mediaKeyGateway = new FakeMediaKeyGateway();
         SystemMediaController controller = new SystemMediaController(sessionGateway, mediaKeyGateway);
 
@@ -48,7 +48,7 @@ public class SystemMediaControllerTest {
 
     @Test
     public void dispatch_withoutPermissionFallsBackToMediaKey() {
-        FakeSessionGateway sessionGateway = new FakeSessionGateway(false, new SessionSnapshot("曲目", "艺术家", true));
+        FakeSessionGateway sessionGateway = new FakeSessionGateway(false, new SessionSnapshot("曲目", "艺术家", true, null));
         FakeMediaKeyGateway mediaKeyGateway = new FakeMediaKeyGateway();
         SystemMediaController controller = new SystemMediaController(sessionGateway, mediaKeyGateway);
 
@@ -71,7 +71,7 @@ public class SystemMediaControllerTest {
         MediaSnapshot snapshot = controller.dispatch(TransportAction.PREVIOUS);
 
         assertEquals(ConnectionMode.NO_ACTIVE_SESSION, snapshot.getConnectionMode());
-        assertEquals("未发现活动媒体会话，请先打开音乐应用；控制按钮将降级发送系统媒体键。", snapshot.getMessage());
+        assertEquals("未检测到活动媒体，请在设备上打开音乐应用。", snapshot.getMessage());
         assertEquals(1, mediaKeyGateway.actions.size());
         assertEquals(TransportAction.PREVIOUS, mediaKeyGateway.actions.get(0));
         assertTrue(sessionGateway.actions.isEmpty());
@@ -79,13 +79,13 @@ public class SystemMediaControllerTest {
 
     @Test
     public void snapshotListener_reflectsPlaybackStateChanges() {
-        FakeSessionGateway sessionGateway = new FakeSessionGateway(true, new SessionSnapshot("曲目", "艺术家", false));
+        FakeSessionGateway sessionGateway = new FakeSessionGateway(true, new SessionSnapshot("曲目", "艺术家", false, null));
         FakeMediaKeyGateway mediaKeyGateway = new FakeMediaKeyGateway();
         SystemMediaController controller = new SystemMediaController(sessionGateway, mediaKeyGateway);
         List<MediaSnapshot> snapshots = new ArrayList<>();
 
         controller.setSnapshotListener(snapshots::add);
-        sessionGateway.emit(new SessionSnapshot("曲目", "艺术家", true));
+        sessionGateway.emit(new SessionSnapshot("曲目", "艺术家", true, null));
 
         assertEquals(1, snapshots.size());
         assertEquals(ConnectionMode.ACTIVE_SESSION, snapshots.get(0).getConnectionMode());

@@ -3,19 +3,32 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Car-like cold tech palette -->
-    <color name="bg_dark">#0B0F19</color>
-    <color name="bg_rail">#0F172A</color>
-    <color name="card_bg">#1E293B</color>
-    <color name="accent_cyan">#06B6D4</color>
-    <color name="accent_blue">#38BDF8</color>
-    <color name="text_primary">#F8FAFC</color>
-    <color name="text_secondary">#94A3B8</color>
-    <color name="border_color">#334155</color>
-    <color name="tab_selected_bg">#1E293B</color>
+    <!-- Car-like cold tech palette - Redesigned -->
+    <color name="bg_dark">#030712</color> <!-- Much deeper, truer dark -->
+    <color name="bg_rail">#0B1121</color> <!-- Distinct dark rail with slight blue tint -->
+    <color name="card_bg">#111827</color> <!-- Translucent-friendly card base -->
+    
+    <!-- Neon Cyber Accents -->
+    <color name="accent_cyan">#00F0FF</color> <!-- True neon cyan -->
+    <color name="accent_blue">#0057FF</color> <!-- Electric deep blue -->
+    
+    <!-- Text -->
+    <color name="text_primary">#F8FAFC</color> <!-- Crisp white -->
+    <color name="text_secondary">#64748B</color> <!-- More muted for better contrast hierarchy -->
+    <color name="text_accent">#38BDF8</color> <!-- Slightly softer blue for text highlights -->
+    
+    <!-- Borders and States -->
+    <color name="border_color">#1E293B</color> <!-- Subtle dark border -->
+    <color name="border_highlight">#334155</color> <!-- Lighter border for selected states -->
+    <color name="tab_selected_bg">#1E293B</color> <!-- Replaced by drawable in Java, keeping for fallback -->
     <color name="tab_unselected_bg">#00000000</color>
-    <color name="card_panel_bg">#263247</color>
-    <color name="card_panel_alt_bg">#111827</color>
-    <color name="accent_green">#22C55E</color>
+    
+    <!-- Panels -->
+    <color name="card_panel_bg">#162032</color>
+    <color name="card_panel_alt_bg">#0B1121</color>
+    
+    <!-- Semantic -->
+    <color name="accent_green">#10B981</color>
     <color name="accent_amber">#F59E0B</color>
+    <color name="accent_red">#EF4444</color>
 </resources>

@@ -155,7 +155,7 @@ public final class GForceIndicatorView extends View {
             drawBall(canvas, filteredBallX, filteredBallY);
             drawCenterValue(canvas, cx, cy);
         } else {
-            canvas.drawText("等待数据", cx, cy, valueTextPaint);
+            canvas.drawText("同步中...", cx, cy, valueTextPaint);
         }
     }
 
@@ -189,7 +189,7 @@ public final class GForceIndicatorView extends View {
     private void drawCenterValue(Canvas canvas, float cx, float cy) {
         String gText = String.format("%.2fG", filteredMagnitude);
         canvas.drawText(gText, cx, cy + valueTextPaint.getTextSize() / 3f, valueTextPaint);
-        canvas.drawText("合成G值", cx, cy - 18f * density, labelTextPaint);
+        canvas.drawText("合成 G 值", cx, cy - 18f * density, labelTextPaint);
     }
 
     private float centerX() {

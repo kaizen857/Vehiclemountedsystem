@@ -3,6 +3,7 @@
     android:id="@+id/pageHvacRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/shell_content_padding"
     android:fillViewport="true">
 
     <LinearLayout
@@ -15,17 +16,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/page_hvac_badge"
-            android:textColor="@color/accent_blue"
-            android:textSize="@dimen/page_title_text_size"
+            android:textColor="@color/accent_cyan"
+            android:textSize="@dimen/shell_title_text_size"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/hvacIrCapabilityMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_micro_gap"
-            android:background="@color/card_panel_alt_bg"
-            android:padding="@dimen/hvac_card_padding"
+            android:layout_marginTop="@dimen/shell_content_gap"
+            android:background="@drawable/bg_card_rounded"
+            android:padding="@dimen/shell_card_padding"
             android:text="@string/hvac_ir_capability_local_only"
             android:textColor="@color/accent_amber"
             android:textSize="@dimen/page_status_text_size" />
@@ -33,18 +34,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_micro_gap"
+            android:layout_marginTop="@dimen/shell_content_gap"
             android:orientation="horizontal">
 
+            <!-- Temperature Card -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/page_card_gap"
-                android:layout_weight="2"
-                android:background="@color/card_panel_alt_bg"
-                android:gravity="center_vertical"
+                android:layout_marginEnd="@dimen/shell_content_gap"
+                android:layout_weight="1"
+                android:background="@drawable/bg_card_rounded"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="@dimen/hvac_card_padding">
+                android:padding="@dimen/shell_card_padding">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -57,7 +59,7 @@
                     android:id="@+id/hvacTemperatureValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
+                    android:layout_marginTop="@dimen/page_card_gap"
                     android:textColor="@color/text_primary"
                     android:textSize="@dimen/hvac_temperature_text_size"
                     android:textStyle="bold" />
@@ -65,7 +67,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
+                    android:layout_marginTop="@dimen/page_card_gap"
                     android:orientation="horizontal">
 
                     <TextView
@@ -74,14 +76,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/page_card_gap"
                         android:layout_weight="1"
-                        android:background="@color/card_panel_bg"
+                        android:background="@drawable/bg_card_rounded"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
-                        android:padding="@dimen/hvac_card_padding"
+                        android:padding="20dp"
                         android:text="@string/hvac_temp_decrease"
                         android:textColor="@color/accent_cyan"
-                        android:textSize="@dimen/page_status_text_size"
+                        android:textSize="28sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -89,52 +91,49 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@color/card_panel_bg"
+                        android:background="@drawable/bg_card_rounded"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
-                        android:padding="@dimen/hvac_card_padding"
+                        android:padding="20dp"
                         android:text="@string/hvac_temp_increase"
                         android:textColor="@color/accent_cyan"
-                        android:textSize="@dimen/page_status_text_size"
+                        android:textSize="28sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- Fan Card -->
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:background="@drawable/bg_card_rounded"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="@dimen/shell_card_padding">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hvac_fan_label"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/page_label_text_size" />
+
+                <TextView
+                    android:id="@+id/hvacFanValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/hvac_temperature_text_size"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/card_panel_bg"
-                    android:orientation="vertical"
-                    android:padding="@dimen/hvac_card_padding">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/hvac_fan_label"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="@dimen/page_label_text_size" />
-
-                    <TextView
-                        android:id="@+id/hvacFanValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/page_micro_gap"
-                        android:textColor="@color/text_primary"
-                        android:textSize="@dimen/page_value_text_size"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
+                    android:layout_marginTop="@dimen/page_card_gap"
                     android:orientation="horizontal">
 
                     <TextView
@@ -143,14 +142,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/page_card_gap"
                         android:layout_weight="1"
-                        android:background="@color/card_panel_bg"
+                        android:background="@drawable/bg_card_rounded"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
-                        android:padding="@dimen/hvac_card_padding"
+                        android:padding="20dp"
                         android:text="@string/hvac_fan_decrease"
                         android:textColor="@color/accent_cyan"
-                        android:textSize="@dimen/page_status_text_size"
+                        android:textSize="28sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -158,26 +157,27 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@color/card_panel_bg"
+                        android:background="@drawable/bg_card_rounded"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
-                        android:padding="@dimen/hvac_card_padding"
+                        android:padding="20dp"
                         android:text="@string/hvac_fan_increase"
                         android:textColor="@color/accent_cyan"
-                        android:textSize="@dimen/page_status_text_size"
+                        android:textSize="28sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
+        <!-- Mode Card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_micro_gap"
-            android:background="@color/card_panel_bg"
+            android:layout_marginTop="@dimen/shell_content_gap"
+            android:background="@drawable/bg_card_rounded"
             android:orientation="vertical"
-            android:padding="@dimen/hvac_card_padding">
+            android:padding="@dimen/shell_card_padding">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -198,7 +198,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/page_micro_gap"
+                android:layout_marginTop="@dimen/page_card_gap"
                 android:orientation="horizontal">
 
                 <TextView
@@ -207,14 +207,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/page_card_gap"
                     android:layout_weight="1"
-                    android:background="@color/card_panel_alt_bg"
+                    android:background="@drawable/bg_card_rounded"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:padding="@dimen/hvac_card_padding"
+                    android:padding="@dimen/shell_card_padding"
                     android:text="@string/hvac_mode_auto"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_status_text_size" />
+                    android:textSize="@dimen/page_status_text_size"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/hvacModeCool"
@@ -222,14 +223,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/page_card_gap"
                     android:layout_weight="1"
-                    android:background="@color/card_panel_alt_bg"
+                    android:background="@drawable/bg_card_rounded"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:padding="@dimen/hvac_card_padding"
+                    android:padding="@dimen/shell_card_padding"
                     android:text="@string/hvac_mode_cool"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_status_text_size" />
+                    android:textSize="@dimen/page_status_text_size"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/hvacModeHeat"
@@ -237,14 +239,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/page_card_gap"
                     android:layout_weight="1"
-                    android:background="@color/card_panel_alt_bg"
+                    android:background="@drawable/bg_card_rounded"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:padding="@dimen/hvac_card_padding"
+                    android:padding="@dimen/shell_card_padding"
                     android:text="@string/hvac_mode_heat"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_status_text_size" />
+                    android:textSize="@dimen/page_status_text_size"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/hvacModeDefog"
@@ -252,45 +255,48 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/page_card_gap"
                     android:layout_weight="1"
-                    android:background="@color/card_panel_alt_bg"
+                    android:background="@drawable/bg_card_rounded"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:padding="@dimen/hvac_card_padding"
+                    android:padding="@dimen/shell_card_padding"
                     android:text="@string/hvac_mode_defog"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_status_text_size" />
+                    android:textSize="@dimen/page_status_text_size"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/hvacModeFan"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/card_panel_alt_bg"
+                    android:background="@drawable/bg_card_rounded"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:padding="@dimen/hvac_card_padding"
+                    android:padding="@dimen/shell_card_padding"
                     android:text="@string/hvac_mode_fan"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_status_text_size" />
+                    android:textSize="@dimen/page_status_text_size"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
 
+        <!-- AC & Circulation Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_micro_gap"
+            android:layout_marginTop="@dimen/shell_content_gap"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/page_card_gap"
+                android:layout_marginEnd="@dimen/shell_content_gap"
                 android:layout_weight="1"
-                android:background="@color/card_panel_bg"
+                android:background="@drawable/bg_card_rounded"
                 android:orientation="vertical"
-                android:padding="@dimen/hvac_card_padding">
+                android:padding="@dimen/shell_card_padding">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -312,12 +318,12 @@
                     android:id="@+id/hvacAcToggle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
-                    android:background="@color/card_panel_alt_bg"
+                    android:layout_marginTop="@dimen/page_card_gap"
+                    android:background="@drawable/bg_card_rounded"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:padding="@dimen/hvac_card_padding"
+                    android:padding="@dimen/shell_card_padding"
                     android:text="@string/hvac_ac_toggle"
                     android:textColor="@color/accent_cyan"
                     android:textSize="@dimen/page_status_text_size"
@@ -328,9 +334,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/card_panel_bg"
+                android:background="@drawable/bg_card_rounded"
                 android:orientation="vertical"
-                android:padding="@dimen/hvac_card_padding">
+                android:padding="@dimen/shell_card_padding">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -352,18 +358,17 @@
                     android:id="@+id/hvacCirculationToggle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
-                    android:background="@color/card_panel_alt_bg"
+                    android:layout_marginTop="@dimen/page_card_gap"
+                    android:background="@drawable/bg_card_rounded"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
-                    android:padding="@dimen/hvac_card_padding"
+                    android:padding="@dimen/shell_card_padding"
                     android:text="@string/hvac_circulation_toggle"
                     android:textColor="@color/accent_cyan"
                     android:textSize="@dimen/page_status_text_size"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 </ScrollView>

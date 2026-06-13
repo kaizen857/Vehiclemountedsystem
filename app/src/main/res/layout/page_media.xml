@@ -1,186 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/pageMediaRoot"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <!-- Album Art Background -->
+    <ImageView
+        android:id="@+id/mediaAlbumArtBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:alpha="0.4"
+        android:importantForAccessibility="no" />
 
-        <TextView
-            android:id="@+id/mediaPageTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/page_media_badge"
-            android:textColor="@color/accent_blue"
-            android:textSize="@dimen/page_title_text_size"
-            android:textStyle="bold" />
+    <!-- Dark Overlay for Readability -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#990B0F19" />
 
-        <TextView
-            android:id="@+id/mediaStatusMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_micro_gap"
-            android:background="@color/card_panel_alt_bg"
-            android:padding="@dimen/page_card_padding"
-            android:textColor="@color/accent_amber"
-            android:textSize="@dimen/page_status_text_size" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:padding="@dimen/page_card_padding">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_micro_gap"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/mediaPageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/page_section_gap"
+                android:text="@string/page_media_badge"
+                android:textColor="@color/accent_blue"
+                android:textSize="@dimen/page_title_text_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/mediaStatusMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/page_section_gap"
+                android:background="@drawable/bg_card_rounded"
+                android:padding="@dimen/page_card_padding"
+                android:textColor="@color/accent_amber"
+                android:textSize="@dimen/page_status_text_size"
+                android:gravity="center"
+                android:textAlignment="center" />
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/page_card_gap"
-                android:layout_weight="2"
-                android:background="@color/card_panel_bg"
-                android:orientation="vertical"
-                android:padding="@dimen/page_card_padding">
+                android:layout_marginBottom="@dimen/page_section_gap"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/media_title_label"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/page_label_text_size" />
+                    android:layout_marginEnd="@dimen/page_card_gap"
+                    android:layout_weight="2"
+                    android:background="@drawable/bg_card_rounded"
+                    android:orientation="vertical"
+                    android:padding="@dimen/page_card_padding">
 
-                <TextView
-                    android:id="@+id/mediaTitleValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
-                    android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_value_text_size"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/media_title_label"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/page_label_text_size" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_section_gap"
-                    android:text="@string/media_artist_label"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/page_label_text_size" />
+                    <TextView
+                        android:id="@+id/mediaTitleValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/page_micro_gap"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/page_value_text_size"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/mediaArtistValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
-                    android:textColor="@color/accent_blue"
-                    android:textSize="@dimen/page_value_text_size"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/page_section_gap"
+                        android:text="@string/media_artist_label"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/page_label_text_size" />
+
+                    <TextView
+                        android:id="@+id/mediaArtistValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/page_micro_gap"
+                        android:textColor="@color/accent_blue"
+                        android:textSize="@dimen/page_value_text_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_rounded"
+                    android:orientation="vertical"
+                    android:padding="@dimen/page_card_padding">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/media_playback_label"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/page_label_text_size" />
+
+                    <TextView
+                        android:id="@+id/mediaPlaybackValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/page_micro_gap"
+                        android:textColor="@color/text_primary"
+                        android:textSize="@dimen/page_value_text_size"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/page_section_gap"
+                        android:text="@string/media_connection_label"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/page_label_text_size" />
+
+                    <TextView
+                        android:id="@+id/mediaConnectionModeValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/page_micro_gap"
+                        android:textColor="@color/accent_cyan"
+                        android:textSize="@dimen/page_status_text_size"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/card_panel_alt_bg"
-                android:orientation="vertical"
-                android:padding="@dimen/page_card_padding">
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/page_section_gap">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/mediaPreviousControl"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/media_playback_label"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/page_label_text_size" />
-
-                <TextView
-                    android:id="@+id/mediaPlaybackValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
+                    android:layout_marginEnd="@dimen/page_card_gap"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_rounded"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="@string/media_previous"
                     android:textColor="@color/text_primary"
-                    android:textSize="@dimen/page_value_text_size"
+                    android:textSize="@dimen/page_status_text_size"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/mediaPlayPauseControl"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_section_gap"
-                    android:text="@string/media_connection_label"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="@dimen/page_label_text_size" />
+                    android:layout_marginEnd="@dimen/page_card_gap"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_rounded"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="24dp"
+                    android:text="@string/media_play_pause"
+                    android:textColor="@color/accent_cyan"
+                    android:textSize="@dimen/page_title_text_size"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/mediaConnectionModeValue"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/mediaNextControl"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/page_micro_gap"
-                    android:textColor="@color/accent_cyan"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_rounded"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="20dp"
+                    android:text="@string/media_next"
+                    android:textColor="@color/text_primary"
                     android:textSize="@dimen/page_status_text_size"
                     android:textStyle="bold" />
             </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/page_micro_gap"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/mediaPreviousControl"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/page_card_gap"
-                android:layout_weight="1"
-                android:background="@color/card_panel_bg"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="@dimen/page_card_padding"
-                android:text="@string/media_previous"
-                android:textColor="@color/accent_cyan"
-                android:textSize="@dimen/page_status_text_size"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/mediaPlayPauseControl"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/page_card_gap"
-                android:layout_weight="1"
-                android:background="@color/card_panel_bg"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="@dimen/page_card_padding"
-                android:text="@string/media_play_pause"
-                android:textColor="@color/accent_cyan"
-                android:textSize="@dimen/page_status_text_size"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/mediaNextControl"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/page_card_gap"
-                android:layout_weight="1"
-                android:background="@color/card_panel_bg"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="@dimen/page_card_padding"
-                android:text="@string/media_next"
-                android:textColor="@color/accent_cyan"
-                android:textSize="@dimen/page_status_text_size"
-                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/mediaPermissionAction"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/card_panel_alt_bg"
+                android:background="@drawable/bg_card_rounded"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
@@ -190,5 +214,5 @@
                 android:textSize="@dimen/page_status_text_size"
                 android:textStyle="bold" />
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</FrameLayout>

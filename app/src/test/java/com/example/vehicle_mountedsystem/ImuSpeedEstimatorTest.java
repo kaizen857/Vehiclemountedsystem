@@ -24,7 +24,7 @@ public class ImuSpeedEstimatorTest {
         assertEquals(2.0d, estimator.getSpeedMps(), 0.0001d);
         assertEquals(2.0d, state.getSpeedMetersPerSecond(), 0.0001d);
         assertTrue(estimator.getAvailability().isAvailable());
-        assertEquals("IMU 短时估算可用，存在积分漂移", estimator.getAvailability().getMessage());
+        assertEquals("车速估算已就绪", estimator.getAvailability().getMessage());
     }
 
     @Test
@@ -32,18 +32,19 @@ public class ImuSpeedEstimatorTest {
         ImuSpeedEstimator estimator = new ImuSpeedEstimator();
 
         estimator.calibrate();
-        estimator.updateSample(0.1d, 100L);
-        estimator.updateSample(0.1d, 200L);
-        estimator.updateSample(0.1d, 300L);
-        estimator.updateSample(0.1d, 400L);
-        estimator.updateSample(0.1d, 500L);
+        // The first 5 samples are for calibration
+        for (int i = 1; i <= 5; i++) {
+            estimator.updateSample(0.1d, i * 100L);
+        }
+
+        // Give it some movement
         estimator.updateSample(1.1d, 600L);
         estimator.updateSample(1.1d, 700L);
-        estimator.updateSample(0.1d, 800L);
-        estimator.updateSample(0.1d, 900L);
-        estimator.updateSample(0.1d, 1000L);
-        estimator.updateSample(0.1d, 1100L);
-        estimator.updateSample(0.1d, 1200L);
+
+        // Now provide enough still samples to fill the variance window (16) + required still samples (6)
+        for (int i = 0; i < 25; i++) {
+            estimator.updateSample(0.1d, 800L + (i * 100L));
+        }
 
         assertEquals(0.0d, estimator.getSpeedMps(), 0.0001d);
         assertTrue(estimator.getAvailability().isAvailable());
@@ -55,12 +56,9 @@ public class ImuSpeedEstimatorTest {
 
         calibrateAtRest(estimator);
         estimator.setGyroEnergy(0.5d);
-        estimator.updateSample(0.01d, 600L);
-        estimator.updateSample(0.01d, 700L);
-        estimator.updateSample(0.01d, 800L);
-        estimator.updateSample(0.01d, 900L);
-        estimator.updateSample(0.01d, 1000L);
-        estimator.updateSample(0.01d, 1100L);
+        for (int i = 0; i < 25; i++) {
+            estimator.updateSample(0.01d, 600L + (i * 100L));
+        }
 
         assertTrue(estimator.getSpeedMps() > 0.0d);
     }
@@ -73,13 +71,11 @@ public class ImuSpeedEstimatorTest {
         estimator.updateSample(1.0d, 600L);
 
         estimator.setGyroEnergy(0.0d);
-        estimator.updateSample(0.0d, 700L);
-        estimator.updateSample(0.0d, 800L);
-        estimator.updateSample(0.0d, 900L);
-        estimator.updateSample(0.0d, 1000L);
-        ImuSpeedState state = estimator.updateSample(0.0d, 1100L);
+        for (int i = 0; i < 25; i++) {
+            estimator.updateSample(0.0d, 700L + (i * 100L));
+        }
 
-        assertEquals(0.0d, state.getSpeedMetersPerSecond(), 0.0001d);
+        assertEquals(0.0d, estimator.getSpeedMps(), 0.0001d);
     }
 
     @Test
@@ -122,14 +118,14 @@ public class ImuSpeedEstimatorTest {
         estimator.updateSample(4.0d, 400L);
         estimator.updateSample(4.0d, 500L);
         assertFalse(estimator.getAvailability().isAvailable());
-        assertEquals("IMU 零偏过大，校准失败", estimator.getAvailability().getMessage());
+        assertEquals("车速校准失败：环境波动过大", estimator.getAvailability().getMessage());
 
         estimator.calibrate();
         calibrateAtRestWithoutStart(estimator);
         estimator.updateSample(1.0d, 1200L);
         estimator.updateSample(1.0d, 1800L);
         assertFalse(estimator.getAvailability().isAvailable());
-        assertEquals("IMU 采样率过低，需重置", estimator.getAvailability().getMessage());
+        assertEquals("传感器采样异常", estimator.getAvailability().getMessage());
         assertEquals(0.0d, estimator.getSpeedMps(), 0.0d);
     }
 
@@ -154,18 +150,18 @@ public class ImuSpeedEstimatorTest {
 
         calibrateWithBias(estimator, 4.0d);
         assertFalse(estimator.getAvailability().isAvailable());
-        assertEquals("IMU 零偏过大，校准失败", estimator.getAvailability().getMessage());
+        assertEquals("车速校准失败：环境波动过大", estimator.getAvailability().getMessage());
 
         estimator.reset();
         assertFalse(estimator.getAvailability().isAvailable());
-        assertEquals("IMU 速度估算不可用/需重置", estimator.getAvailability().getMessage());
+        assertEquals("车速估算不可用", estimator.getAvailability().getMessage());
         estimator.updateSample(1.0d, 600L);
         assertEquals(0.0d, estimator.getSpeedMps(), 0.0d);
         assertFalse(estimator.getAvailability().isAvailable());
 
         calibrateAtRest(estimator);
         assertTrue(estimator.getAvailability().isAvailable());
-        assertEquals("IMU 零偏校准完成", estimator.getAvailability().getMessage());
+        assertEquals("车速校准完成", estimator.getAvailability().getMessage());
     }
 
     private static void calibrateAtRest(ImuSpeedEstimator estimator) {

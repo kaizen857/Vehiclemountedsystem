@@ -234,7 +234,7 @@ public final class SensorPageController {
     }
 
     private static SensorReading unavailable(String name, String unit) {
-        return new SensorReading(name, 0.0d, 0.0d, 0.0d, unit, AvailabilityStatus.unavailable(name + "未就绪", 0L));
+        return new SensorReading(name, 0.0d, 0.0d, 0.0d, unit, AvailabilityStatus.unavailable(name + "不可用", 0L));
     }
 
     private static void text(View view, int id, String value) {

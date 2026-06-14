@@ -145,7 +145,7 @@ public final class MotionSensorProvider {
                 0.0d,
                 0.0d,
                 unitFor(sensorType),
-                AvailabilityStatus.unavailable(nameFor(sensorType) + "未就绪", 0L));
+                AvailabilityStatus.unavailable(nameFor(sensorType) + "不可用", 0L));
     }
 
     private static SensorReading waitingReading(int sensorType) {

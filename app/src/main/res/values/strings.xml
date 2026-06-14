@@ -69,7 +69,7 @@
     <string name="navigation_route_primary">推荐路线 · 环城路</string>
     <string name="navigation_route_secondary">备选路线 · 支路</string>
     <string name="minimal_vehicle_health_normal">良好</string>
-    <string name="minimal_sensor_fallback">传感器数据流未就绪，当前显示预设状态</string>
+    <string name="minimal_sensor_fallback">传感器在线，数据可用</string>
     <string name="minimal_demo_mode_value">标准模式</string>
     <string name="sensor_timestamp_default">刷新频率：0 ms</string>
     <string name="hvac_temperature_label">车内温度</string>

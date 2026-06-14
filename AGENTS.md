@@ -12,7 +12,7 @@
 ## 构建与验证
 
 - 必须使用仓库 wrapper：`./gradlew`。不要改用系统 Gradle。
-- Toolchain：Gradle wrapper 9.4.1，`gradle/gradle-daemon-jvm.properties` 和 `foojay-resolver-convention` 插件指定 daemon JDK 21，AGP 9.2.1，Java 11。
+- Toolchain：Gradle wrapper 9.4.1，`gradle/gradle-daemon-jvm.properties` 和 `foojay-resolver-convention` 插件指定 daemon JDK 21，AGP 9.2.1，Java 11。`gradle.properties` 中 JVM 参数为 `-Xmx2048m -Dfile.encoding=UTF-8`。
 - Android 配置在 `app/build.gradle.kts`：`compileSdk = release(36) { minorApiLevel = 1 }`，`targetSdk = 36`，`minSdk = 24`。
 - 依赖通过 `gradle/libs.versions.toml` 管理；`settings.gradle.kts` 使用 `RepositoriesMode.FAIL_ON_PROJECT_REPOS`，不要在模块里临时加仓库。
 - 常用命令：
@@ -52,7 +52,12 @@
 ## UI 约束
 
 - 主题是 `Theme.VehiclemountedSystem` (继承自 Material 3：`Theme.Material3.DayNight.NoActionBar`)，冷色科技风暗色主题。
-- 关键颜色：`@color/bg_dark` `#0B0F19`，`@color/accent_cyan` `#06B6D4`，`@color/accent_blue` `#38BDF8`。
+- 关键颜色（以 `app/src/main/res/values/colors.xml` 为准，DESIGN.md 中的色值已过时）：
+  - 背景：`@color/bg_dark` `#030712`，`@color/bg_rail` `#0B1121`，`@color/card_bg` `#111827`
+  - 强调：`@color/accent_cyan` `#00F0FF`，`@color/accent_blue` `#0057FF`
+  - 文字：`@color/text_primary` `#F8FAFC`，`@color/text_secondary` `#64748B`，`@color/text_accent` `#38BDF8`
+  - 面板：`@color/card_panel_bg` `#162032`，`@color/card_panel_alt_bg` `#0B1121`
+  - 语义：`@color/accent_green` `#10B981`，`@color/accent_amber` `#F59E0B`，`@color/accent_red` `#EF4444`
 - 不要在 UI 文件里引入 Material 2 主题或浅色默认风格；新增页面优先复用现有颜色、dimens、卡片/标签文案模式。
 
 ## 测试约定

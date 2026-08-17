@@ -1,4 +1,20 @@
-# 本地工具产物（补充在 Android 模板之后）
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# 本地工具产物（补充）
 .omo/
 .opencode/
 *.prefs
